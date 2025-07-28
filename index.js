@@ -1,7 +1,7 @@
-let app=require("./src/app.js");
+const app = require("./src/app.js");
 
-const PORT=process.env.port;
+const PORT = process.env.PORT || 3000;
+
 app.listen(PORT, () => {
-    console.log(`server started on http://localhost:${PORT}/`);
+  console.log(`Server started ${PORT}`);
 });
-
