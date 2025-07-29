@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>All Courses</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+</head>
+
+<body>
+    <div class="container mt-5">
+        <h2 class="mb-4 text-center"> View All Courses</h2>
+        <% if (typeof message !== "undefined" && message) { %>
+            <div class="alert alert-success text-center">
+                <%= message %>
+            </div>
+            <% } %>
+
+
+                <table class="table table-bordered">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>Course ID</th>
+                            <th>Course Name</th>
+                            <th>Description</th>
+                            <th>Total Credits</th>
+                            <th>Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% courses.forEach(course => { %>
+                            <tr>
+                                <td>
+                                    <%= course.course_id %>
+                                </td>
+                                <td>
+                                    <%= course.course_name %>
+                                </td>
+                                <td>
+                                    <%= course.description %>
+                                </td>
+                                <td>
+                                    <%= course.total_credits %>
+                                </td>
+                                <td>
+                                    <a href="/deletecourse/<%= course.course_id %>" onclick="return confirm('Are you sure to delete this course?')" class="btn btn-danger btn-sm">
+                           Delete
+                        </a>
+                                </td>
+                            </tr>
+                            <% }); %>
+                    </tbody>
+                </table>
+    </div>
+</body>
+
+</html>
