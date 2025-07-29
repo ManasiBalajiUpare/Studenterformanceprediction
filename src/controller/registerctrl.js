@@ -3,7 +3,7 @@ const bcrypt = require("bcrypt");
 
 exports.register=(req,res)=>{
     res.render("register");
-    console.log("hello");
+    
 }
 exports.registerUser = async (req, res) => {
   try {
@@ -14,7 +14,7 @@ exports.registerUser = async (req, res) => {
       return res.send("Passwords do not match");
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hashSync(password, 8);
 
     const userData = {
       name,
@@ -28,7 +28,7 @@ exports.registerUser = async (req, res) => {
       photo: req.file ? req.file.filename : null
     };
 
-    registerModel.insertUser(userData, (err, result) => {
+    registermodel.insertUser(userData, (err, result) => {
       if (err) {
         console.error(err);
         return res.send("Error inserting user");
