@@ -1,4 +1,4 @@
-const conn=require("../../db.js");
+const conn = require("../../db.js");
 
 exports.insertUser = (userData, callback) => {
   const sql = `INSERT INTO users 
@@ -17,5 +17,6 @@ exports.insertUser = (userData, callback) => {
     userData.photo
   ];
 
-  db.query(sql, values, callback);
+  // ✅ Use conn instead of db
+  conn.query(sql, values, callback);
 };
