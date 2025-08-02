@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>View Students</title>
+</head>
+<body>
+  <h1>Student List</h1>
+  <table border="1">
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Course</th>
+    </tr>
+    <% students.forEach(student => { %>
+      <tr>
+        <td><%= student.id %></td>
+        <td><%= student.name %></td>
+        <td><%= student.email %></td>
+        <td><%= student.course %></td>
+      </tr>
+    <% }); %>
+  </table>
+</body>
+</html>
