@@ -1,100 +1,95 @@
 const db = require("../../db.js");
+
+// Render add course form
 exports.renderAddCourseForm = (req, res) => {
     res.render("courses", { message: "" });
 };
 
-exports.addcourse = (req, res) => {
-    const { course_name, description, total_credits } = req.body;
+// Add course
+exports.addcourse = async(req, res) => {
+    try {
+        const { course_name, description, total_credits } = req.body;
 
-    if (!course_name || !total_credits) {
-        return res.render("courses", { message: "Course name and credits are required" });
-    }
-
-    const sql = "INSERT INTO courses (course_name, description, total_credits) VALUES (?, ?, ?)";
-    db.query(sql, [course_name, description, total_credits], (err, result) => {
-        if (err) {
-            console.error(err);
-
-            // Check for duplicate entry error
-            if (err.code === 'ER_DUP_ENTRY') {
-                return res.render("courses", { message: "Course already exists......." });
-            }
-
-            return res.render("courses", { message: "Database error. Please try again." });
+        if (!course_name || !total_credits) {
+            return res.render("courses", { message: "Course name and credits are required" });
         }
+
+        const sql = "INSERT INTO courses (course_name, description, total_credits) VALUES (?, ?, ?)";
+        await db.query(sql, [course_name, description, total_credits]);
 
         res.render("courses", { message: "Course Added Successfully....." });
-    });
-};
-
-exports.viewallcourses = (req, res) => {
-    const sql = "SELECT * FROM COURSES ";
-    db.query(sql, (err, results) => {
-        if (err) {
-            console.err("Err fetching courses", err);
-            return res.status(500).json({ message: "Database error" });
+    } catch (err) {
+        console.error("Error adding course:", err);
+        if (err.code === 'ER_DUP_ENTRY') {
+            return res.render("courses", { message: "Course already exists......." });
         }
-        res.render("viewcourses", { courses: results })
-    });
+        res.render("courses", { message: "Database error. Please try again." });
+    }
 };
 
+// View all courses
+exports.viewallcourses = async(req, res) => {
+    try {
+        const [results] = await db.query("SELECT * FROM COURSES");
+        res.render("viewcourses", { courses: results });
+    } catch (err) {
+        console.error("Error fetching courses:", err);
+        res.status(500).json({ message: "Database error" });
+    }
+};
 
-exports.deletecourse = (req, res) => {
+// Delete course
+exports.deletecourse = async(req, res) => {
     const { id } = req.params;
-    const sql = "DELETE FROM COURSES WHERE course_id = ?";
-    db.query(sql, [id], (err, result) => {
-        if (err) {
+    try {
+        await db.query("DELETE FROM COURSES WHERE course_id = ?", [id]);
 
-            console.error("Error updating course:", err);
-            return res.status(500).send('Database error');
-        }
-
-        db.query("SELECT * FROM COURSES", (err2, courses) => {
-            res.render('viewcourses', {
-                courses,
-                message: "Course Deleted Successfully......."
-            });
+        const [courses] = await db.query("SELECT * FROM COURSES");
+        res.render("viewcourses", {
+            courses,
+            message: "Course Deleted Successfully......."
         });
-    });
+    } catch (err) {
+        console.error("Error deleting course:", err);
+        res.status(500).send("Database error");
+    }
 };
 
-exports.editcourse = (req, res) => {
+// Edit course
+exports.editcourse = async(req, res) => {
     const { id } = req.params;
-    const sql = "SELECT * FROM courses WHERE course_id = ?";
-    db.query(sql, [id], (err, result) => {
-        if (err) {
-            console.error("Database error while fething course:", err);
-            return res.send("Update Failed");
-        }
+    try {
+        const [result] = await db.query("SELECT * FROM courses WHERE course_id = ?", [id]);
+
         if (result.length === 0) {
             console.warn("No course found with ID:", id);
             return res.send("Course not found");
         }
-        console.log(result);
-        console.log('isArray result:', Array.isArray(result));
+
         res.render('editcourse', { course: result[0] });
-    });
+    } catch (err) {
+        console.error("Database error while fetching course:", err);
+        res.send("Update Failed");
+    }
 };
-exports.updatecourse = (req, res) => {
+
+// Update course
+exports.updatecourse = async(req, res) => {
     const { id } = req.params;
     const { course_name, description, total_credits } = req.body;
 
-    const sql = "UPDATE courses SET course_name=?, description=?, total_credits=? WHERE course_id=?";
-    db.query(sql, [course_name, description, total_credits, id], (err, result) => {
-        if (err) {
-            console.error("Error updating course:", err);
-            return res.send("Update failed");
-        }
-        db.query("SELECT * FROM courses", (err, result) => {
-            if (err) {
-                console.error("Error fetching courses:", err);
-                return res.send("Error fetching data");
-            }
+    try {
+        await db.query(
+            "UPDATE courses SET course_name=?, description=?, total_credits=? WHERE course_id=?", [course_name, description, total_credits, id]
+        );
 
-            res.render("viewcourses", {
-                courses: result,
-                message: "Course updated successfully......."
-            });
+        const [courses] = await db.query("SELECT * FROM courses");
+        res.render("viewcourses", {
+            courses,
+            message: "Course updated successfully......."
         });
-    });
+    } catch (err) {
+        console.error("Error updating course:", err);
+        res.send("Update failed");
+    }
 };
