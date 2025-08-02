@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>View Profile</title>
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .profile-img {
+      width: 150px;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 4px solid #dee2e6;
+    }
+  </style>
+</head>
+<body>
+
+  <%- include("navbar.ejs") %>
+
+  <div class="container mt-5">
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <div class="card shadow">
+          <div class="card-body text-center">
+
+            <!-- Profile photo -->
+            <% if (user.photo) { %>
+              <img src="/uploads/<%= user.photo %>" alt="Profile Photo" class="profile-img mb-3">
+            <% } else { %>
+              <img src="https://via.placeholder.com/150" alt="Default Photo" class="profile-img mb-3">
+            <% } %>
+
+            <!-- Username label -->
+            <h4 class="mb-1"><%= loginUserName %></h4>
+            <p class="text-muted mb-4">👤 User</p>
+
+            <!-- User details -->
+            <ul class="list-group list-group-flush text-start">
+              <li class="list-group-item"><strong>Email:</strong> <%= user.email %></li>
+              <li class="list-group-item"><strong>Contact:</strong> <%= user.contact %></li>
+              <li class="list-group-item"><strong>Address:</strong> <%= user.address %></li>
+              <li class="list-group-item"><strong>Qualification:</strong> <%= user.qualification %></li>
+              <li class="list-group-item"><strong>Course:</strong> <%= user.course %></li>
+              <li class="list-group-item"><strong>Skills:</strong> <%= user.skills %></li>
+            </ul>
+
+            <!-- Buttons -->
+            <div class="mt-4">
+              <a href="/updateprofile" class="btn btn-warning me-2">✏️ Update Profile</a>
+              <a href="/dashboard" class="btn btn-outline-primary">← Back to Dashboard</a>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,20 +1,29 @@
-let registermodel=require("../models/registermodel");
 const bcrypt = require("bcrypt");
+const registermodel = require("../models/registermodel");
 
-exports.register=(req,res)=>{
-    res.render("register");
-    
-}
+exports.register = (req, res) => {
+  res.render("register"); // render register page
+};
+
 exports.registerUser = async (req, res) => {
   try {
-    const { name, email, password, confirm_password, address, contact, qualification, course, skills } = req.body;
+    const {
+      name,
+      email,
+      password,
+      confirm_password,
+      address,
+      contact,
+      qualification,
+      course,
+      skills
+    } = req.body;
 
-    // Password match validation
     if (password !== confirm_password) {
       return res.send("Passwords do not match");
     }
 
-    const hashedPassword = await bcrypt.hashSync(password, 8);
+    const hashedPassword = await bcrypt.hash(password, 8);
 
     const userData = {
       name,
@@ -28,16 +37,11 @@ exports.registerUser = async (req, res) => {
       photo: req.file ? req.file.filename : null
     };
 
-    registermodel.insertUser(userData, (err, result) => {
-      if (err) {
-        console.error(err);
-        return res.send("Error inserting user");
-      }
-      res.send("User registered successfully!");
-    });
+    await registermodel.insertUser(userData);
 
+    res.send("User registered successfully!");
   } catch (err) {
-    console.error(err);
+    console.error("Registration Error:", err);
     res.send("Something went wrong");
   }
 };

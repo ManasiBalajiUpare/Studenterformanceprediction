@@ -1,8 +1,10 @@
-const conn = require("../../db.js");
+const pool = require("../../db.js");
 
-exports.insertUser = (userData, callback) => {
-  const sql = `INSERT INTO users 
-    (name, email, password, address, contact, qualification, course, skills, photo) 
+// INSERT user into DB using async/await
+exports.insertUser = async (userData) => {
+  const sql = `
+    INSERT INTO users 
+      (name, email, password, address, contact, qualification, course, skills, photo) 
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`;
 
   const values = [
@@ -17,6 +19,12 @@ exports.insertUser = (userData, callback) => {
     userData.photo
   ];
 
-  // ✅ Use conn instead of db
-  conn.query(sql, values, callback);
+  const [result] = await pool.query(sql, values);
+  return result;
+};
+
+// Check if user already exists by email
+exports.getUserByEmail = async (email) => {
+  const [rows] = await pool.query("SELECT * FROM users WHERE email = ?", [email]);
+  return rows.length > 0 ? rows[0] : null;
 };
