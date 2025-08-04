@@ -1,62 +1,86 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <title>View Student</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+  <meta charset="UTF-8">
+  <title>View Students</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
 </head>
-
 <body>
-    <div class="container mt-5">
-        <h2 class="mb-4 text-center"> View All Students</h2>
+  <div class="container mt-5">
+    <h2 class="mb-4 text-center">View All Students</h2>
 
-        <table class="table table-bordered">
-            <thead class="thead-dark">
-                <tr>
-                    <th>Student ID</th>
-                    <th>Student Name</th>
-                    <th>Description</th>
-                    <th>Total Credits</th>
-                    <th>Delete</th>
-                    <th>Update</th>
-                </tr>
-            </thead>
-            <tbody>
-                <% if (students && students.length > 0) { %>
-                    <% students.forEach(student => { %>
-                        <tr>
-                            <td><%= student.student_id %></td>
-                            <td><%= student.student_name %></td>
-                            <td><%= student.description %></td>
-                            <td><%= student.total_credits %></td>
-                            <td>
-                                <form action="/deletestudent/<%= student.student_id %>" method="POST" style="display:inline;">
-                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure to delete this student?')">
-                                        Delete
-                                    </button>
-                                </form>
-                            </td>
-                            <td>
-                                <a href="/editstudent/<%= student.student_id %>" class="btn btn-primary btn-sm">Update</a>
-                            </td>
-                        </tr>
-                    <% }); %>
+    <% if (typeof message !== 'undefined' && message) { %>
+      <div class="alert alert-success text-center">
+        <%= message %>
+      </div>
+    <% } %>
+
+    <table class="table table-bordered table-hover">
+      <thead class="thead-dark">
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Contact</th>
+          <th>Address</th>
+          <th>Qualification</th>
+          <th>Course</th>
+          <th>Skills</th>
+          <th>Photo</th>
+          <th>Member Since</th>
+          <th>Disable Student</th>
+          <th>Update</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if (students && students.length > 0) { %>
+          <% students.forEach(student => { %>
+            <tr>
+              <td><%= student.user_id %></td>
+              <td><%= student.name %></td>
+              <td><%= student.email %></td>
+              <td><%= student.contact %></td>
+              <td><%= student.address %></td>
+              <td><%= student.qualification %></td>
+              <td><%= student.course %></td>
+              <td><%= student.skills %></td>
+              
+              <!-- Photo -->
+              <td>
+                <% if (student.photo) { %>
+                  <img src="/uploads/<%= student.photo %>" width="50" height="50" alt="Photo">
                 <% } else { %>
-                    <tr>
-                        <td colspan="6" class="text-center">No students found.</td>
-                    </tr>
+                  N/A
                 <% } %>
-            </tbody>
-        </table>
+              </td>
 
-        <% if (typeof message !== 'undefined' && message) { %>
-            <div class="alert alert-success text-center">
-                <%= message %>
-            </div>
+              <!-- Created At -->
+              <td><%= new Date(student.created_at).toLocaleString() %></td>
+
+              <!-- Disable Button -->
+              <td>
+                <% if (student.disabled === 1) { %>
+                  <button class="btn btn-secondary btn-sm" disabled>Disabled</button>
+                <% } else { %>
+                  <form action="/disablestudent/<%= student.user_id %>" method="POST" style="display:inline;">
+                    <button type="submit" class="btn btn-warning btn-sm" onclick="return confirm('Disable this student?')">Disable</button>
+                  </form>
+                <% } %>
+              </td>
+
+              <!-- Update Button -->
+              <td>
+                <a href="/editstudent/<%= student.user_id %>" class="btn btn-primary btn-sm">Update</a>
+              </td>
+            </tr>
+          <% }) %>
+        <% } else { %>
+          <tr>
+            <td colspan="12" class="text-center">No students found.</td>
+          </tr>
         <% } %>
-
-    </div>
+      </tbody>
+    </table>
+  </div>
 </body>
-
 </html>
