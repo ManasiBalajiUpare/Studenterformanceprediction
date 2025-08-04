@@ -25,7 +25,7 @@ exports.validateLoginUser = async (req, res) => {
 
     // Set session values
     req.session.loginUserId = userData.user_id;
-    req.session.loginUserName = userData.name;
+    req.session.loginUserEmail = userData.email;
     req.session.user = userData;
 
     res.redirect("/dashboard");
@@ -52,10 +52,12 @@ exports.viewProfile = (req, res) => {
 
 
 
+
+
 // Show update profile form
 exports.updateProfileForm = (req, res) => {
   res.render("updateprofile", {
-    loginUserName: req.session.loginUserName,
+    loginUserEmail: req.session.loginUserEmail,
     user: req.session.user,
   });
 };
