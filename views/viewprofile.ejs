@@ -17,6 +17,7 @@
 </head>
 <body>
 
+  <!-- Include navbar if it exists -->
   <%- include("navbar.ejs") %>
 
   <div class="container mt-5">
@@ -26,24 +27,28 @@
           <div class="card-body text-center">
 
             <!-- Profile photo -->
-            <% if (user.photo) { %>
+            <% if (user && user.photo) { %>
               <img src="/uploads/<%= user.photo %>" alt="Profile Photo" class="profile-img mb-3">
             <% } else { %>
               <img src="https://via.placeholder.com/150" alt="Default Photo" class="profile-img mb-3">
             <% } %>
 
-            <!-- Username label -->
-            <h4 class="mb-1"><%= loginUserName %></h4>
-            <p class="text-muted mb-4">User</p>
+            <!-- User name and email -->
+            <h4 class="mb-1"><%= user.name %></h4>
+            <p class="text-muted mb-4">👤 <%= user.email %></p>
 
             <!-- User details -->
             <ul class="list-group list-group-flush text-start">
+              <li class="list-group-item"><strong>Name:</strong> <%= user.name %></li>
               <li class="list-group-item"><strong>Email:</strong> <%= user.email %></li>
               <li class="list-group-item"><strong>Contact:</strong> <%= user.contact %></li>
               <li class="list-group-item"><strong>Address:</strong> <%= user.address %></li>
               <li class="list-group-item"><strong>Qualification:</strong> <%= user.qualification %></li>
               <li class="list-group-item"><strong>Course:</strong> <%= user.course %></li>
               <li class="list-group-item"><strong>Skills:</strong> <%= user.skills %></li>
+              <li class="list-group-item"><strong>Member Since:</strong> 
+                <%= new Date(user.created_at).toLocaleDateString("en-IN", { year: 'numeric', month: 'long', day: 'numeric' }) %>
+              </li>
             </ul>
 
             <!-- Buttons -->
