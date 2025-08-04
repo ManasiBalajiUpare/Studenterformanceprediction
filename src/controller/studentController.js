@@ -1,15 +1,14 @@
-const conn = require("../../db"); 
+const pool = require("../../db"); 
 // GET /viewstudent
-exports.viewStudents = (req, res) => {
-  const name = "Student Panel";
-
-  conn.query("SELECT * FROM students", (err, results) => {
-    if (err) {
-      console.log("Error fetching students:", err);
-      return res.status(500).send("Database error");
-    }
-    res.render("viewstudent", { students: results, name });
-  });
+exports.viewStudents =async (req, res) => {
+  //const name = "Student Panel";
+   try{
+    const [rows]=await pool.query("select *from users");
+    res.render("viewstudent",{students:rows});
+   } catch (err){
+    console.error(err);
+    res.status(500).send("database errror");
+   }
 };
 //delete student
 exports.deleteStudent = (req, res) => {
