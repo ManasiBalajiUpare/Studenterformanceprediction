@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>View Student</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+</head>
+
+<body>
+    <div class="container mt-5">
+        <h2 class="mb-4 text-center"> View All Students</h2>
+
+        <table class="table table-bordered">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Student ID</th>
+                    <th>Student Name</th>
+                    <th>Description</th>
+                    <th>Total Credits</th>
+                    <th>Delete</th>
+                    <th>Update</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% if (students && students.length > 0) { %>
+                    <% students.forEach(student => { %>
+                        <tr>
+                            <td><%= student.student_id %></td>
+                            <td><%= student.student_name %></td>
+                            <td><%= student.description %></td>
+                            <td><%= student.total_credits %></td>
+                            <td>
+                                <form action="/deletestudent/<%= student.student_id %>" method="POST" style="display:inline;">
+                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure to delete this student?')">
+                                        Delete
+                                    </button>
+                                </form>
+                            </td>
+                            <td>
+                                <a href="/editstudent/<%= student.student_id %>" class="btn btn-primary btn-sm">Update</a>
+                            </td>
+                        </tr>
+                    <% }); %>
+                <% } else { %>
+                    <tr>
+                        <td colspan="6" class="text-center">No students found.</td>
+                    </tr>
+                <% } %>
+            </tbody>
+        </table>
+
+        <% if (typeof message !== 'undefined' && message) { %>
+            <div class="alert alert-success text-center">
+                <%= message %>
+            </div>
+        <% } %>
+
+    </div>
+</body>
+
+</html>

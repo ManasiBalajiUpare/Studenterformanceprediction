@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Student</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h2 class="mb-4 text-center">Edit Student</h2>
+
+        <form action="/updatestudent/<%= student.student_id %>" method="POST">
+
+            <div class="form-group">
+                <label for="student_name">Student Name</label>
+                <input type="text" class="form-control" id="student_name" name="student_name" value="<%= student.student_name %>" required>
+            </div>
+
+            <div class="form-group">
+                <label for="description">Description</label>
+                <input type="text" class="form-control" id="description" name="description" value="<%= student.description %>" required>
+            </div>
+
+            <div class="form-group">
+                <label for="total_credits">Total Credits</label>
+                <input type="number" class="form-control" id="total_credits" name="total_credits" value="<%= student.total_credits %>" required>
+            </div>
+
+            <button type="submit" class="btn btn-success">Update</button>
+            <a href="/viewstudent" class="btn btn-secondary ml-2">Cancel</a>
+
+        </form>
+    </div>
+</body>
+</html>
