@@ -35,11 +35,11 @@ router.post("/deletecourse/:id", courseCtrl.deletecourse);
 router.get("/editcourse/:id", courseCtrl.editcourse);
 router.post("/updatecourse/:id", courseCtrl.updatecourse);
 //*********************************************Jainab Routes****************************************** */
-//router.get("/viewstudent",studentController.viewStudents);
-//router.get("/deletestudent/:id", studentController.deleteStudent);
-//router.post("/editstudent/:id", studentController.editStudent);
-//router.get("/editstudent/:id", studentController.editStudent);
-//router.post("/updatestudent/:id", studentController.updateStudent);
+router.get("/viewstudent",studentController.viewStudents);
+router.get("/deletestudent/:id", studentController.deleteStudent);
+router.post("/editstudent/:id", studentController.editStudent);
+router.get("/editstudent/:id", studentController.editStudent);
+router.post("/updatestudent/:id", studentController.updateStudent);
 
 
 
