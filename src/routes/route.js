@@ -37,7 +37,7 @@ router.post("/deletecourse/:id", courseCtrl.deletecourse);
 router.get("/editcourse/:id", courseCtrl.editcourse);
 router.post("/updatecourse/:id", courseCtrl.updatecourse);
 //*********************************************Jainab Routes****************************************** */
-router.get("/viewstudent",studentController.viewStudents);
+router.get("/admin/viewstudent",studentController.viewStudents);
 router.get("/deletestudent/:id", studentController.deleteStudent);
 router.post("/students/delete/:id",studentController.deleteStudent)
 router.post("/editstudent/:id", studentController.editStudent);
