@@ -1,98 +1,107 @@
 const pool = require("../../db"); 
+
 // GET /viewstudent
-exports.viewStudents =async (req, res) => {
-  //const name = "Student Panel";
-   try{
-    const [rows]=await pool.query("select *from users");
-    res.render("viewstudent",{students:rows});
-   } catch (err){
+exports.viewStudents = async (req, res) => {
+  try {
+    const [rows] = await pool.query("SELECT * FROM users");
+    res.render("viewstudent", { students: rows });
+  } catch (err) {
     console.error(err);
-    res.status(500).send("database errror");
-   }
+    res.status(500).send("Database error");
+  }
 };
-//delete student
-exports.deleteStudent = (req, res) => {
-    const { id } = req.params;
-    const sql = "DELETE FROM students WHERE student_id = ?";
 
-    db.query(sql, [id], (err, result) => {
-        if (err) {
-            console.error("Error deleting student:", err);
-            return res.status(500).send('Database error');
-        }
+// DELETE student
 
-        // Fetch updated list of students
-        db.query("SELECT * FROM students", (err2, students) => {
-            if (err2) {
-                console.error("Error fetching students:", err2);
-                return res.status(500).send('Database error');
-            }
+exports.deleteStudent = async (req, res) => {
+  const { id } = req.params;
 
-            res.render('viewstudent', {
-                students,
-                message: "Student Deleted Successfully......."
-            });
-        });
+  try {
+    const [result] = await pool.query("DELETE FROM users WHERE user_id = ?", [id]);
+
+    if (result.affectedRows === 0) {
+      return res.status(404).send("Student not found");
+    }
+
+    const [students] = await pool.query("SELECT * FROM users");
+
+    res.render("viewstudent", {
+      students,
+      message: "✅ Student Deleted Successfully!"
     });
+  } catch (err) {
+    console.error("Error deleting student:", err);
+    res.status(500).send("Database error");
+  }
+};
+// GET /students/edit/:id
+exports.editStudent = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const [result] = await pool.query("SELECT * FROM users WHERE user_id = ?", [id]);
+
+    if (result.length === 0) {
+      return res.send("Student not found");
+    }
+
+    res.render("editstudent", { student: result[0], message: null });
+  } catch (err) {
+    console.error("Error fetching student:", err);
+    res.status(500).send("Database error");
+  }
 };
 
-exports.editStudent = (req, res) => {
-    const { id } = req.params;
-    const sql = "SELECT * FROM students WHERE student_id = ?";
+exports.updateStudent = async (req, res) => {
+  const { id } = req.params;
+  const { name, email, address, contact, qualification, course, skills } = req.body;
 
-    db.query(sql, [id], (err, result) => {
-        if (err) {
-            console.error("Database error while fetching student:", err);
-            return res.send("Update Failed");
-        }
+  try {
+    const sql = `
+      UPDATE users
+      SET name = ?, email = ?, address = ?, contact = ?, qualification = ?, course = ?, skills = ?
+      WHERE user_id = ?
+    `;
+    await pool.query(sql, [name, email, address, contact, qualification, course, skills, id]);
 
-        if (result.length === 0) {
-            console.warn("No student found with ID:", id);
-            return res.send("Student not found");
-        }
+    const [result] = await pool.query("SELECT * FROM users WHERE user_id = ?", [id]);
 
-        console.log(result);
-        console.log('isArray result:', Array.isArray(result));
-
-        res.render('editstudent', { student: result[0] });
+    res.render("editstudent", {
+      student: result[0],
+      message: "Student Updated Successfully!"
     });
+  } catch (err) {
+    console.error("Error updating student:", err);
+    res.status(500).send("Update failed");
+  }
 };
 
+//enanle disable button
+exports.toggleStudentStatus = async (req, res) => {
+  const { id } = req.params;
+  try {
+    // Get current status
+    const [student] = await pool.query("SELECT disabled FROM users WHERE user_id = ?", [id]);
 
-exports.updateStudent = (req, res) => {
-    const { id } = req.params;
-    const { student_name, description, total_credits } = req.body;
+    if (student.length === 0) {
+      return res.status(404).send("Student not found");
+    }
 
-    const sql = "UPDATE students SET student_name = ?, description = ?, total_credits = ? WHERE student_id = ?";
-    db.query(sql, [student_name, description, total_credits, id], (err, result) => {
-        if (err) {
-            console.error("Error updating student:", err);
-            return res.status(500).send("Update failed");
-        }
+    // Toggle status (1 → 0, 0 → 1)
+    const newStatus = student[0].disabled === 1 ? 0 : 1;
 
-        db.query("SELECT * FROM students", (err2, students) => {
-            res.render("viewstudent", {
-                students,
-                message: "Student Updated Successfully!"
-            });
-        });
-    });
+    await pool.query("UPDATE users SET disabled = ? WHERE user_id = ?", [newStatus, id]);
+
+    // Refresh list
+    const [students] = await pool.query("SELECT * FROM users");
+    res.render("viewstudent", { students, message: "✅ Student status updated!" });
+  } catch (err) {
+    console.error("Error toggling status:", err);
+    res.status(500).send("Database error");
+  }
 };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-exports.homepage=(req,res)=>{
+// Homepage
+exports.homepage = (req, res) => {
   res.render("home.ejs");
-}
+};
