@@ -1,13 +1,14 @@
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 const loginusermodel = require("../models/loginusermodel");
-const pool = require("../../db.js"); // mysql2.createPool()
+const pool = require("../../db.js");
 
 // Show login form
 exports.login = (req, res) => {
   res.render("login", { msg: null });
 };
 
-// Validate login credentials
+// Validate login credentials and issue JWT
 exports.validateLoginUser = async (req, res) => {
   const { email, password } = req.body;
 
@@ -23,10 +24,26 @@ exports.validateLoginUser = async (req, res) => {
       return res.render("login", { msg: "Incorrect password" });
     }
 
-    // Set session values
-    req.session.loginUserId = userData.user_id;
-    req.session.loginUserEmail = userData.email;
-    req.session.user = userData;
+    // Create JWT token
+    // Add role: userData.role to token
+const token = jwt.sign(
+  {
+    user_id: userData.user_id,
+    name: userData.name,
+    email: userData.email,
+    photo: userData.photo,
+    role: userData.role, 
+  },
+  process.env.JWT_SECRET,
+  { expiresIn: "1d" }
+);
+
+
+    // Store token in cookie
+    res.cookie("token", token, {
+      httpOnly: true,
+      maxAge: 24 * 60 * 60 * 1000,
+    });
 
     res.redirect("/dashboard");
   } catch (err) {
@@ -35,36 +52,43 @@ exports.validateLoginUser = async (req, res) => {
   }
 };
 
-// Show dashboard
 exports.dashboard = (req, res) => {
-  res.render("userdashboard", {
-    loginUserName: req.session.loginUserName,
-  });
+  const role = req.user.role; // ✅ Use actual role from JWT
+
+  console.log("Role=" + role);
+
+  if (role === "admin") {
+    res.render("admindashboard", {
+      loginUserName: req.user.name,
+      user: req.user, 
+    });
+  } else {
+    res.render("userdashboard", {
+      loginUserName: req.user.name,
+      user: req.user, 
+    });
+  }
 };
 
-// Show user profile
+// Show profile
 exports.viewProfile = (req, res) => {
   res.render("viewprofile", {
-    loginUserName: req.session.loginUserName,
-    user: req.session.user,
+    loginUserName: req.user.name,
+    user: req.user,
   });
 };
 
-
-
-
-
-// Show update profile form
+// Show update form
 exports.updateProfileForm = (req, res) => {
   res.render("updateprofile", {
-    loginUserEmail: req.session.loginUserEmail,
-    user: req.session.user,
+    loginUserEmail: req.user.email,
+    user: req.user,
   });
 };
 
 // Handle profile update
 exports.updateProfile = async (req, res) => {
-  const userId = req.session.loginUserId;
+  const userId = req.user.user_id;
   const {
     name,
     email,
@@ -75,7 +99,7 @@ exports.updateProfile = async (req, res) => {
     skills,
   } = req.body;
 
-  const photo = req.file ? req.file.filename : req.session.user.photo;
+  const photo = req.file ? req.file.filename : req.user.photo;
 
   try {
     const sql = `UPDATE users 
@@ -94,13 +118,21 @@ exports.updateProfile = async (req, res) => {
       userId,
     ]);
 
-    // Get updated data from DB
+    // Regenerate JWT with updated info
     const [updatedUserRows] = await pool.query(
       "SELECT * FROM users WHERE user_id = ?",
       [userId]
     );
 
-    req.session.user = updatedUserRows[0]; // update session
+    const updatedUser = updatedUserRows[0];
+    const newToken = jwt.sign(updatedUser, process.env.JWT_SECRET, {
+      expiresIn: "1d",
+    });
+
+    res.cookie("token", newToken, {
+      httpOnly: true,
+      maxAge: 24 * 60 * 60 * 1000,
+    });
 
     res.redirect("/viewprofile");
   } catch (err) {
@@ -109,12 +141,8 @@ exports.updateProfile = async (req, res) => {
   }
 };
 
-
-
 // Logout
 exports.logout = (req, res) => {
-  req.session.destroy((err) => {
-    if (err) console.error("Logout error:", err);
-    res.redirect("/login");
-  });
+  res.clearCookie("token");
+  res.redirect("/login");
 };

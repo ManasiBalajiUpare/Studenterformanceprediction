@@ -4,6 +4,7 @@ const registermodel = require("../models/registermodel");
 // Show registration page
 exports.register = (req, res) => {
   res.render("register", { msg: null, showLoginLink: false });
+  res.send("wecome in application");
 };
 
 // Handle user registration
