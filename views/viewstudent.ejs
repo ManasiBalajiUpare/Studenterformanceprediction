@@ -28,8 +28,10 @@
           <th>Skills</th>
           <th>Photo</th>
           <th>Member Since</th>
-          <th>Disable Student</th>
+          <th>Status</th> 
+          <th>Enable/Disable</th> 
           <th>Update</th>
+          <th>Delete</th>
         </tr>
       </thead>
       <tbody>
@@ -57,26 +59,42 @@
               <!-- Created At -->
               <td><%= new Date(student.created_at).toLocaleString() %></td>
 
-              <!-- Disable Button -->
+              <!-- Status -->
               <td>
                 <% if (student.disabled === 1) { %>
-                  <button class="btn btn-secondary btn-sm" disabled>Disabled</button>
+                  <span class="badge badge-danger">Disabled</span>
                 <% } else { %>
-                  <form action="/disablestudent/<%= student.user_id %>" method="POST" style="display:inline;">
-                    <button type="submit" class="btn btn-warning btn-sm" onclick="return confirm('Disable this student?')">Disable</button>
-                  </form>
+                  <span class="badge badge-success">Active</span>
                 <% } %>
+              </td>
+
+            
+              <td>
+                <form action="/students/toggle/<%= student.user_id %>" method="POST" style="display:inline;">
+                  <% if (student.disabled === 1) { %>
+                    <button type="submit" class="btn btn-success btn-sm" onclick="return confirm('Enable this student?')">Enable</button>
+                  <% } else { %>
+                    <button type="submit" class="btn btn-warning btn-sm" onclick="return confirm('Disable this student?')">Disable</button>
+                  <% } %>
+                </form>
               </td>
 
               <!-- Update Button -->
               <td>
                 <a href="/editstudent/<%= student.user_id %>" class="btn btn-primary btn-sm">Update</a>
               </td>
+
+              <!-- Delete Button -->
+              <td>
+                <form action="/students/delete/<%= student.user_id %>" method="POST" style="display:inline;">
+                  <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this student?')">Delete</button>
+                </form>
+              </td>
             </tr>
           <% }) %>
         <% } else { %>
           <tr>
-            <td colspan="12" class="text-center">No students found.</td>
+            <td colspan="14" class="text-center">No students found.</td>
           </tr>
         <% } %>
       </tbody>
