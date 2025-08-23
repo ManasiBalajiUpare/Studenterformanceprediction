@@ -10,37 +10,37 @@
 
 <body>
 
+    <%- include("navbar.ejs") %>
+        <div class="container mt-5">
+            <h2 class="text-center mb-4">Add Course</h2>
 
-    <div class="container mt-5">
-        <h2 class="text-center mb-4">Add Course</h2>
-
-        <form action="/addcourse" method="POST">
-            <div class="form-group">
-                <label for="course_name">Course Name</label>
-                <input type="text" class="form-control" id="course_name" name="course_name" placeholder="Enter Course Name" required>
-            </div>
-
-            <div class="form-group">
-                <label for="description">Course Description</label>
-                <input type="text" class="form-control" id="description" name="description" placeholder="Enter Description">
-            </div>
-
-            <div class="form-group">
-                <label for="total_credits">Total Credits</label>
-                <input type="number" class="form-control" id="total_credits" name="total_credits" placeholder="Enter Credits" required>
-            </div>
-
-            <button type="submit" class="btn btn-primary">Submit</button>
-            <br><br>
-            <% if (message && message.trim() !== "") { %>
-                <div class="alert alert-success">
-                    <%= message %>
+            <form action="/admin/addcourse" method="POST">
+                <div class="form-group">
+                    <label for="course_name">Course Name</label>
+                    <input type="text" class="form-control" id="course_name" name="course_name" placeholder="Enter Course Name" required>
                 </div>
-                <% } %>
+
+                <div class="form-group">
+                    <label for="description">Course Description</label>
+                    <input type="text" class="form-control" id="description" name="description" placeholder="Enter Description">
+                </div>
+
+                <div class="form-group">
+                    <label for="total_credits">Total Credits</label>
+                    <input type="number" class="form-control" id="total_credits" name="total_credits" placeholder="Enter Credits" required>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Submit</button>
+                <br><br>
+                <% if (message && message.trim() !== "") { %>
+                    <div class="alert alert-success">
+                        <%= message %>
+                    </div>
+                    <% } %>
 
 
-        </form>
-    </div>
+            </form>
+        </div>
 </body>
 
 </html>
