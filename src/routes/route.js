@@ -9,6 +9,7 @@ let navbarCtrl = require("../controller/navbarCtrl");
 let studentController= require("../controller/studentController.js");
 let verifyToken=require("../middleware/verifytoken.js");
 const {isadmin,isUser}=require("../middleware/rolecheck.js");
+let perctrl=require("../controller/perctrl.js");
 let router = express.Router(); 
 //*************************************  Manasi Routes***************************************/
 router.get("/", homepagectrl.homepage);
@@ -19,11 +20,11 @@ router.get("/login", loginctrl.login);
 router.post("/validateuser", loginctrl.validateLoginUser);
 router.get("/viewprofile", verifyToken,loginctrl.viewProfile);
 router.get("/dashboard",verifyToken,loginctrl.dashboard);
-router.get("/admindashboard",verifyToken,loginctrl.dashboard);
+router.get("/admin/dashboard",verifyToken,loginctrl.dashboard);
 router.get("/updateprofile", verifyToken,loginctrl.updateProfileForm);
 router.post("/updateprofile",verifyToken,upload.single("photo"), loginctrl.updateProfile);
 router.get("/logout",loginctrl.logout);
-
+router.get("/viewperformance",perctrl.viewPerformance);
 
 
 //**********************************Priyanka Routes************************** */
