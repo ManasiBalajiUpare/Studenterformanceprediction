@@ -57,12 +57,12 @@ exports.registerUser = async (req, res) => {
     // 5. Insert user into database
     await registermodel.insertUser(userData);
 
-    // 6. On success, go to login page with message
-    res.render("login", { msg: "Registration successful. Please login." });
+    // 6. On success → redirect to login page
+    return res.render("login", { msg: "Registration successful. Please login." });
 
   } catch (err) {
     console.error("Registration Error:", err);
-    res.render("register", {
+    return res.render("register", {
       msg: "Something went wrong during registration.",
       showLoginLink: false
     });

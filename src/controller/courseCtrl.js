@@ -1,6 +1,5 @@
 const db = require("../../db.js");
 
-// Render add course form
 exports.renderAddCourseForm = (req, res) => {
     res.render("courses", { message: "" });
 };
@@ -26,7 +25,6 @@ exports.addcourse = async(req, res) => {
         res.render("courses", { message: "Database error. Please try again." });
     }
 };
-
 // View all courses
 exports.viewallcourses = async(req, res) => {
     try {
@@ -92,4 +90,27 @@ exports.updatecourse = async(req, res) => {
         console.error("Error updating course:", err);
         res.send("Update failed");
     }
+};
+// Search course
+/*exports.searchCourseByUsingName = ((req, res) => {
+let course_name = req.query.course_name;
+let promise = coursemodel.getsearchCourseByName(course_name);
+promise.then((result) => {
+res.json(result);
+}).catch((err) => {
+res.send("Something went wrong");
+})
+}); */
+// Search course
+exports.searchCourseByUsingName = (req, res) => {
+    let course_name = req.query.course_name;
+
+    coursemodel.getSearchCourseByName(course_name)
+        .then((result) => {
+            res.json(result); // return results as JSON
+        })
+        .catch((err) => {
+            console.error(err);
+            res.status(500).send("Something went wrong");
+        });
 };
