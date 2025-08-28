@@ -1,12 +1,136 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home - Student Performance System</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      background: linear-gradient(135deg, #1d2671, #c33764);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #fff;
+    }
+
+    /* Hero Section */
+    .hero {
+      min-height: 90vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      text-align: center;
+      padding: 40px 20px;
+    }
+    .hero h1 {
+      font-size: 3.2rem;
+      font-weight: bold;
+      margin-bottom: 20px;
+      animation: fadeInDown 1s ease-in-out;
+    }
+    .hero p {
+      font-size: 1.25rem;
+      max-width: 750px;
+      margin: 0 auto 25px;
+      line-height: 1.6;
+      animation: fadeInUp 1.2s ease-in-out;
+    }
+    .btn-custom {
+      margin: 10px;
+      padding: 12px 30px;
+      border: none;
+      border-radius: 30px;
+      font-weight: 600;
+      color: #fff;
+      background: linear-gradient(90deg, #ff9966, #ff5e62);
+      transition: 0.3s;
+    }
+    .btn-custom:hover {
+      transform: scale(1.05);
+      opacity: 0.9;
+    }
+
+    /* Features Section */
+    .features {
+      padding: 70px 20px;
+      text-align: center;
+    }
+    .features h2 {
+      font-size: 2rem;
+      font-weight: bold;
+      margin-bottom: 50px;
+    }
+    .feature-card {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 15px;
+      padding: 30px;
+      transition: transform 0.3s;
+      height: 100%;
+    }
+    .feature-card:hover {
+      transform: translateY(-8px);
+      background: rgba(255, 255, 255, 0.2);
+    }
+    .feature-card h4 {
+      font-size: 1.3rem;
+      margin-bottom: 15px;
+    }
+    .feature-card p {
+      font-size: 1rem;
+      line-height: 1.5;
+    }
+
+    /* Animations */
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
 </head>
 <body>
-    <%- include("navbar.ejs") %>
-    <h1>welcome to student performance prediction Application</h1>
+  <%- include("navbar.ejs") %>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <h1>🎓 Welcome to Student Performance System</h1>
+    <p>
+      A smart solution to track, analyze, and enhance student performance.  
+      Designed for students, teachers, and administrators to stay connected with progress and results.
+    </p>
+    <div>
+      <a href="/about" class="btn btn-custom">Learn More</a>
+      <a href="/login" class="btn btn-custom">Get Started</a>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="container features">
+    <h2>✨ Our Features</h2>
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="feature-card">
+          <h4>📊 Performance Tracking</h4>
+          <p>View grades, progress, and performance analytics in one place with clarity and ease.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="feature-card">
+          <h4>👨‍🏫 Role-Based Dashboards</h4>
+          <p>Custom dashboards for Admin, Teacher, and Student – tailored for every role.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="feature-card">
+          <h4>🔒 Secure Authentication</h4>
+          <p>Data protection with JWT-based authentication and role-based access controls.</p>
+        </div>
+      </div>
+    </div>
+  </section>
 </body>
 </html>
