@@ -9,67 +9,67 @@
 
 <body>
     <%- include("navbar.ejs") %>
-        <div class="container mt-5">
-            <h2 class="mb-4 text-center"> View All Courses</h2>
+    <div class="container mt-5">
+        <h2 class="mb-4 text-center"> View All Courses</h2>
 
 
 
-            <table class="table table-bordered">
-                <thead class="thead-dark">
+        <table class="table table-bordered">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Course ID</th>
+                    <th>Course Name</th>
+                    <th>Description</th>
+                    <th>Total Credits</th>
+                    <th>Delete</th>
+                    <th>Update</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% courses.forEach(course => { %>
                     <tr>
-                        <th>Course ID</th>
-                        <th>Course Name</th>
-                        <th>Description</th>
-                        <th>Total Credits</th>
-                        <th>Delete</th>
-                        <th>Update</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <% courses.forEach(course => { %>
-                        <tr>
-                            <td>
-                                <%= course.course_id %>
-                            </td>
-                            <td>
-                                <%= course.course_name %>
-                            </td>
-                            <td>
-                                <%= course.description %>
-                            </td>
-                            <td>
-                                <%= course.total_credits %>
-                            </td>
-                            <td>
-                                <form action="/deletecourse/<%= course.course_id %>" method="POST" style="display:inline;">
+                        <td>
+                            <%= course.course_id %>
+                        </td>
+                        <td>
+                            <%= course.course_name %>
+                        </td>
+                        <td>
+                            <%= course.description %>
+                        </td>
+                        <td>
+                            <%= course.total_credits %>
+                        </td>
+                        <td>
+                            <form action="/deletecourse/<%= course.course_id %>" method="POST" style="display:inline;">
 
-                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure to delete this course?')">
+                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure to delete this course?')">
                                         Delete
                         </button>
-                                </form>
+                            </form>
 
 
-                            </td>
-                            <td>
+                        </td>
+                        <td>
 
-                                <a href="/editcourse/<%= course.course_id %>" class="btn btn-primary btn-sm">Update</a>
-                            </td>
+                            <a href="/editcourse/<%= course.course_id %>" class="btn btn-primary btn-sm">Update</a>
+                        </td>
 
-                        </tr>
-                        <% }); %>
-                </tbody>
-            </table>
+                    </tr>
+                    <% }); %>
+            </tbody>
+        </table>
 
-            <% if (typeof message !=='undefined' && message) { %>
-                <div class="alert alert-success text-center ">
-                    <%= message %>
-                </div>
-                <% } %>
-
-
+        <% if (typeof message !=='undefined' && message) { %>
+            <div class="alert alert-success text-center ">
+                <%= message %>
+            </div>
+            <% } %>
 
 
-        </div>
+
+
+    </div>
 </body>
 
 </html>
