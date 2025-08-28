@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>About - Student Performance System</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background: linear-gradient(120deg, #2c3e50, #000428); /* dark gradient */
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #fff !important;
+    }
+    .about-section {
+      padding: 60px 20px;
+    }
+    .about-card {
+      background: rgba(255, 255, 255, 0.08); /* translucent card */
+      border-radius: 15px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.6);
+      padding: 30px;
+      margin-bottom: 20px;
+      transition: transform 0.3s;
+      color: #fff;
+    }
+    .about-card:hover {
+      transform: translateY(-5px);
+      background: rgba(255, 255, 255, 0.15);
+    }
+    h1, h3, p, li {
+      color: #fff !important;
+    }
+    p {
+      font-size: 1.1rem;
+    }
+    ul {
+      list-style: none;
+      padding-left: 0;
+    }
+    ul li::before {
+    
+      color: aqua;
+    }
+  </style>
+</head>
+<body>
+  <%- include("navbar.ejs") %>
+
+  <div class="container about-section">
+    <div class="text-center mb-5">
+      <h1>About Student Performance System</h1>
+      <p class="text-light">Helping institutions track, analyze, and improve student performance effectively.</p>
+    </div>
+
+    <div class="about-card">
+      <h3>🎯 Our Goal</h3>
+      <p>
+        The Student Performance System is designed to simplify academic tracking. 
+        It helps teachers, administrators, and students monitor progress, identify strengths, 
+        and work on areas needing improvement. 
+      </p>
+    </div>
+
+    <div class="about-card">
+      <h3>📊 Key Features</h3>
+      <ul>
+        <li class="l1">Student Registration and Profile Management</li>
+        <li class="l1">Course and Subject Tracking</li>
+        <li>Performance Reports with Charts & Graphs</li>
+        <li>Role-based Dashboards for Admins, Teachers, and Students</li>
+        <li>Secure Login & JWT Authentication</li>
+      </ul>
+    </div>
+
+    <div class="about-card">
+      <h3>🚀 Why Choose Us?</h3>
+      <p>
+        Our system provides a clear overview of academic performance, 
+        ensuring students stay motivated and educators can make informed decisions. 
+        With real-time insights and user-friendly dashboards, it’s easier than ever 
+        to track academic growth.
+      </p>
+    </div>
+  </div>
+</body>
+</html>
