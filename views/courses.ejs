@@ -150,22 +150,23 @@
                 <button type="submit" class="btn btn-primary">Submit</button>
                 <br><br>
                 <% if (message && message.trim() !== "") { %>
-                    <div class="alert alert-success">
+                    <div class="alert <%= messageType === 'success' ? 'alert-success' : 'alert-danger' %>">
                         <%= message %>
                     </div>
-                    <script>
-                        document.addEventListener("DOMContentLoaded", function() {
-                            const alert = document.querySelector(".alert-success");
-                            if (alert) {
-                                setTimeout(() => {
-                                    alert.style.transition = "opacity 0.5s ease";
-                                    alert.style.opacity = "0";
-                                    setTimeout(() => alert.remove(), 500);
-                                }, 1000); // hide after 3 seconds
-                            }
-                        });
-                    </script>
                     <% } %>
+
+                        <script>
+                            document.addEventListener("DOMContentLoaded", function() {
+                                const alert = document.querySelector(".alert-success");
+                                if (alert) {
+                                    setTimeout(() => {
+                                        alert.style.transition = "opacity 0.5s ease";
+                                        alert.style.opacity = "0";
+                                        setTimeout(() => alert.remove(), 500);
+                                    }, 1000); // hide after 3 seconds
+                                }
+                            });
+                        </script>
             </form>
         </div>
 </body>

@@ -1,30 +1,29 @@
 const db = require("../../db.js");
+const Course = require("../models/coursemodel.js");
 
 exports.renderAddCourseForm = (req, res) => {
-    res.render("courses", { message: "" });
+    console.log("GET /admin/addcourse hit");
+    res.render("courses", { message: "", messageType: "" });
 };
 
-// Add course
-exports.addcourse = async(req, res) => {
+
+
+exports.addCourse = async(req, res) => {
     try {
         const { course_name, description, total_credits } = req.body;
+        // Call your model
+        await require("../models/coursemodel").addCourse(course_name, description, total_credits);
 
-        if (!course_name || !total_credits) {
-            return res.render("courses", { message: "Course name and credits are required" });
-        }
-
-        const sql = "INSERT INTO courses (course_name, description, total_credits) VALUES (?, ?, ?)";
-        await db.query(sql, [course_name, description, total_credits]);
-
-        res.render("courses", { message: "Course Added Successfully....." });
+        res.render("courses", { message: "Course Added Successfully", messageType: "success" });
     } catch (err) {
         console.error("Error adding course:", err);
-        if (err.code === 'ER_DUP_ENTRY') {
-            return res.render("courses", { message: "Course already exists......." });
-        }
-        res.render("courses", { message: "Database error. Please try again." });
+        res.render("courses", { message: "Error adding course", messageType: "danger" });
     }
 };
+
+
+
+
 // View all courses
 exports.viewallcourses = async(req, res) => {
     try {
@@ -91,16 +90,7 @@ exports.updatecourse = async(req, res) => {
         res.send("Update failed");
     }
 };
-// Search course
-/*exports.searchCourseByUsingName = ((req, res) => {
-let course_name = req.query.course_name;
-let promise = coursemodel.getsearchCourseByName(course_name);
-promise.then((result) => {
-res.json(result);
-}).catch((err) => {
-res.send("Something went wrong");
-})
-}); */
+
 // Search course
 exports.searchCourseByUsingName = (req, res) => {
     let course_name = req.query.course_name;
