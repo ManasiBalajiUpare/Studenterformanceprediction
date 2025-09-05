@@ -25,6 +25,8 @@ router.get("/updateprofile", verifyToken,loginctrl.updateProfileForm);
 router.post("/updateprofile",verifyToken,upload.single("photo"), loginctrl.updateProfile);
 router.get("/logout",loginctrl.logout);
 router.get("/viewperformance",perctrl.viewPerformance);
+router.get("/about",homepagectrl.aboutPage);
+router.get("/contact",homepagectrl.contactPage);
 
 
 //**********************************Priyanka Routes************************** */

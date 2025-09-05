@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Contact - Student Performance System</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background: linear-gradient(120deg, #000428, #004e92);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #fff;
+    }
+    .contact-section {
+      padding: 60px 20px;
+    }
+    .contact-card {
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 15px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.6);
+      padding: 30px;
+      transition: transform 0.3s;
+    }
+    .contact-card:hover {
+      transform: translateY(-5px);
+      background: rgba(255, 255, 255, 0.15);
+    }
+    label {
+      color: #fff;
+    }
+    .form-control {
+      background: rgba(255,255,255,0.1);
+      border: none;
+      color: #fff;
+    }
+    .form-control::placeholder {
+      color: #ddd;
+    }
+    .btn-custom {
+      background: linear-gradient(90deg, #ff6a00, #ee0979);
+      border: none;
+      color: #fff;
+      font-weight: bold;
+      border-radius: 25px;
+      padding: 10px 20px;
+      transition: 0.3s;
+    }
+    .btn-custom:hover {
+      opacity: 0.8;
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+<body>
+  <%- include("navbar.ejs") %>
+
+  <div class="container contact-section">
+    <div class="text-center mb-5">
+      <h1>📞 Contact Us</h1>
+      <p class="text-light">We’d love to hear from you! Get in touch with our team for queries, support, or feedback.</p>
+    </div>
+
+    <div class="row g-4">
+      <!-- Contact Form -->
+      <div class="col-md-6">
+        <div class="contact-card">
+          <h3>Send us a Message</h3>
+          <form>
+            <div class="mb-3">
+              <label for="name">Name</label>
+              <input type="text" id="name" class="form-control" placeholder="Your Name">
+            </div>
+            <div class="mb-3">
+              <label for="email">Email</label>
+              <input type="email" id="email" class="form-control" placeholder="Your Email">
+            </div>
+            <div class="mb-3">
+              <label for="subject">Subject</label>
+              <input type="text" id="subject" class="form-control" placeholder="Subject">
+            </div>
+            <div class="mb-3">
+              <label for="message">Message</label>
+              <textarea id="message" class="form-control" rows="4" placeholder="Write your message..."></textarea>
+            </div>
+            <button type="submit" class="btn btn-custom">Send Message</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Contact Info -->
+      <div class="col-md-6">
+        <div class="contact-card">
+          <h3>Our Contact Information</h3>
+          <p><strong>Email:</strong> support@studentperformance.com</p>
+          <p><strong>Phone:</strong> +91 98765 43210</p>
+          <p><strong>Address:</strong> Student Performance HQ, Pune, India</p>
+          <hr>
+          <h5>Follow Us</h5>
+          <p>
+            🌐 <a href="#" class="text-light">Website</a><br>
+            💼 <a href="#" class="text-light">LinkedIn</a><br>
+            🐦 <a href="#" class="text-light">Twitter</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
