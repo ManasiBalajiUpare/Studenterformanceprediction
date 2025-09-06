@@ -16,11 +16,6 @@
     .navbar {
     background: linear-gradient(90deg, #00FFE0, #00ADB5, #2D1B69);
 
-
-
-
-;
-
     }
     .navbar-brand span {
       color: #ffffff;
@@ -75,7 +70,16 @@
       <li class="nav-item"><a class="nav-link" href="/about">About</a></li>
       <li class="nav-item"><a class="nav-link" href="/admin/viewcourses">Courses</a></li>
       <li class="nav-item"><a class="nav-link" href="/contact">Contact</a></li>
-      <li class="nav-item"><a href="/login" class="btn btn-success ml-lg-3">Login</a></li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle btn btn-success text-white" href="#" id="loginDropdown" role="button"
+           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          LoginAs
+        </a>
+        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="loginDropdown">
+          <a class="dropdown-item" href="/adminlogin">Admin Login</a>
+          <a class="dropdown-item" href="/login">User Login</a>
+        </div>
+      </li>
     </ul>
   </div>
 </nav>

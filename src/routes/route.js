@@ -7,9 +7,11 @@ let upload = require("../middlleware/upload.js");
 let homepagectrl = require("../controller/homepagectrl");
 let navbarCtrl = require("../controller/navbarCtrl");
 let studentController= require("../controller/studentController.js");
+let admincontroller=require("../controller/adminctrl.js")
 let verifyToken=require("../middleware/verifytoken.js");
 const {isadmin,isUser}=require("../middleware/rolecheck.js");
-let perctrl=require("../controller/perctrl.js");
+let performanctrl=require("../controller/performanctrl.js")
+
 let router = express.Router(); 
 //*************************************  Manasi Routes***************************************/
 router.get("/", homepagectrl.homepage);
@@ -18,16 +20,19 @@ router.get("/register", registerctrl.register);
 router.post("/register", upload.single("photo"), registerctrl.registerUser);
 router.get("/login", loginctrl.login);
 router.post("/validateuser", loginctrl.validateLoginUser);
+router.get("/adminlogin",admincontroller.adminLogin);
+router.post("/adminlogin", admincontroller.validateAdminLogin);
 router.get("/viewprofile", verifyToken,loginctrl.viewProfile);
 router.get("/dashboard",verifyToken,loginctrl.dashboard);
 router.get("/admin/dashboard",verifyToken,loginctrl.dashboard);
 router.get("/updateprofile", verifyToken,loginctrl.updateProfileForm);
 router.post("/updateprofile",verifyToken,upload.single("photo"), loginctrl.updateProfile);
 router.get("/logout",loginctrl.logout);
-router.get("/viewperformance",perctrl.viewPerformance);
 router.get("/about",homepagectrl.aboutPage);
 router.get("/contact",homepagectrl.contactPage);
-
+router.post("/performance/add", performanctrl.addPerformance);
+router.get("/list", performanctrl.listPerformances);
+router.get("/performance",performanctrl.renderAddForm);
 
 //**********************************Priyanka Routes************************** */
 
