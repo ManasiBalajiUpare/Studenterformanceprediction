@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Add Student Performance</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    body {
+      background-color: #000;
+      font-family: Arial, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: start;
+      padding-top: 80px;
+      margin: 0;
+    }
+
+    .container {
+      position: relative;
+      max-width: 800px;
+      width: 100%;
+      padding: 30px 40px;
+      background: #111;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+      margin: 20px auto;
+    }
+
+    /* Animated gradient border */
+    .container::before,
+    .container::after {
+      content: "";
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(
+        60deg,
+        #ff3cac,
+        #784ba0,
+        #2b86c5,
+        #00ffff,
+        #ff3cac
+      );
+      background-size: 400% 400%;
+      animation: rotate 10s linear infinite;
+      z-index: 0;
+      border-radius: 15px;
+    }
+
+    .container::after {
+      filter: blur(20px);
+    }
+
+    @keyframes rotate {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    .content {
+      position: relative;
+      z-index: 1;
+      color: #fff;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 30px;
+      font-weight: bold;
+      color: #fff;
+    }
+
+    label {
+      color: #fff;
+      font-weight: 600;
+    }
+
+    input[type="number"],
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    textarea {
+      background: #111;
+      border: 1px solid #fff;
+      color: #fff;
+      border-radius: 8px;
+      padding: 10px 12px;
+      width: 100%;
+      margin-bottom: 15px;
+      box-sizing: border-box;
+      font-size: 14px;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    input[type="number"]:focus,
+    input[type="text"]:focus,
+    input[type="email"]:focus,
+    input[type="password"]:focus,
+    textarea:focus {
+      background: #111;
+      color: #fff;
+      border-color: #ff3cac;
+      box-shadow: 0 0 10px rgba(255, 60, 172, 0.5);
+      outline: none;
+    }
+
+    .btn-primary {
+      background: linear-gradient(90deg, #ff3cac, #784ba0, #2b86c5);
+      border: none;
+      width: 100%;
+      padding: 12px;
+      font-size: 18px;
+      font-weight: 600;
+      border-radius: 8px;
+      margin-top: 10px;
+      transition: box-shadow 0.3s ease;
+    }
+
+    .btn-primary:hover,
+    .btn-primary:focus {
+      box-shadow: 0 0 10px rgba(255, 60, 172, 0.8);
+    }
+
+    .alert {
+      margin-top: 10px;
+      font-weight: 600;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+     <%- include("navbar.ejs") %>
+  <div class="container">
+    <div class="content">
+      <h2>Add Student Performance</h2>
+
+      <% if(msg){ %>
+        <div class="alert alert-danger"><%= msg %></div>
+      <% } %>
+
+      <form action="/performance/add" method="POST">
+        <label for="user_id">Student ID</label>
+        <input type="number" id="user_id" name="user_id" placeholder="Enter Student ID" required />
+
+        <label for="attendance">Attendance (%)</label>
+        <input type="number" id="attendance" name="attendance" min="0" max="100" required />
+
+        <label for="assignments_completed">Assignments Completed</label>
+        <input type="number" id="assignments_completed" name="assignments_completed" min="0" required />
+
+        <label for="machine_test_marks">Machine Test Marks</label>
+        <input type="number" id="machine_test_marks" name="machine_test_marks" step="0.01" required />
+
+        <label for="aptitude_test_marks">Aptitude Test Marks</label>
+        <input type="number" id="aptitude_test_marks" name="aptitude_test_marks" step="0.01" required />
+
+        <label for="mock_interview_score">Mock Interview Score</label>
+        <input type="number" id="mock_interview_score" name="mock_interview_score" step="0.01" required />
+
+        <label for="theory_performance">Theory Performance</label>
+        <input type="number" id="theory_performance" name="theory_performance" step="0.01" required />
+
+        <label for="practice_performance">Practice Performance</label>
+        <input type="number" id="practice_performance" name="practice_performance" step="0.01" required />
+
+        <label for="communication_score">Communication Score</label>
+        <input type="number" id="communication_score" name="communication_score" step="0.01" required />
+
+        <label for="behavior_score">Behavior Score</label>
+        <input type="number" id="behavior_score" name="behavior_score" step="0.01" required />
+
+        <button type="submit" class="btn btn-primary">Add Performance</button>
+      </form>
+    </div>
+  </div>
+</body>
+</html>
