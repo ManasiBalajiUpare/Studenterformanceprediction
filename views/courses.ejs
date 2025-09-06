@@ -6,41 +6,169 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Course</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <style>
+        body {
+            background: #000;
+            font-family: Arial, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+            padding-top: 70px;
+            /* 🔹 use this for below-navbar centering */
+        }
+        
+        .card {
+            position: relative;
+            max-width: 500px;
+            width: 100%;
+            padding: 30px;
+            background: #111;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+            margin: 20px auto;
+            animation: fadeIn 1s ease forwards;
+        }
+        /* Animated gradient border */
+        
+        .card::before,
+        .card::after {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(60deg, #ff3cac, #784ba0, #2b86c5, #00ffff, #ff3cac);
+            background-size: 400% 400%;
+            animation: rotate 10s linear infinite;
+            z-index: 0;
+        }
+        
+        .card::after {
+            filter: blur(20px);
+        }
+        
+        @keyframes rotate {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+        
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .card-content {
+            position: relative;
+            z-index: 1;
+        }
+        
+        h2 {
+            text-align: center;
+            color: #fff;
+            margin-bottom: 25px;
+        }
+        
+        label {
+            color: #fff;
+        }
+        
+        input[type="text"],
+        input[type="number"] {
+            background: #111;
+            border: 1px solid #fff;
+            color: #fff;
+            border-radius: 5px;
+            padding: 10px;
+            width: 100%;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        
+        input:focus {
+            border-color: #ff3cac;
+            box-shadow: 0 0 10px rgba(255, 60, 172, 0.5);
+            outline: none;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(90deg, #ff3cac, #784ba0, #2b86c5);
+            border: none;
+            width: 100%;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .alert-success {
+            margin-top: 15px;
+        }
+    </style>
 </head>
 
 <body>
 
+    <%- include("navbar.ejs") %>
+        <div class="container mt-5">
+            <h2 class="text-center mb-4">Add Course</h2>
 
-    <div class="container mt-5">
-        <h2 class="text-center mb-4">Add Course</h2>
-
-        <form action="/addcourse" method="POST">
-            <div class="form-group">
-                <label for="course_name">Course Name</label>
-                <input type="text" class="form-control" id="course_name" name="course_name" placeholder="Enter Course Name" required>
-            </div>
-
-            <div class="form-group">
-                <label for="description">Course Description</label>
-                <input type="text" class="form-control" id="description" name="description" placeholder="Enter Description">
-            </div>
-
-            <div class="form-group">
-                <label for="total_credits">Total Credits</label>
-                <input type="number" class="form-control" id="total_credits" name="total_credits" placeholder="Enter Credits" required>
-            </div>
-
-            <button type="submit" class="btn btn-primary">Submit</button>
-            <br><br>
-            <% if (message && message.trim() !== "") { %>
-                <div class="alert alert-success">
-                    <%= message %>
+            <form action="/admin/addcourse" method="POST">
+                <div class="form-group">
+                    <label for="course_name">Course Name</label>
+                    <input type="text" class="form-control" id="course_name" name="course_name" placeholder="Enter Course Name" required>
                 </div>
-                <% } %>
 
+                <div class="form-group">
+                    <label for="description">Course Description</label>
+                    <input type="text" class="form-control" id="description" name="description" placeholder="Enter Description">
+                </div>
 
-        </form>
-    </div>
+                <div class="form-group">
+                    <label for="total_credits">Total Credits</label>
+                    <input type="number" class="form-control" id="total_credits" name="total_credits" placeholder="Enter Credits" required>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Submit</button>
+                <br><br>
+                <% if (message && message.trim() !== "") { %>
+                    <div class="alert <%= messageType === 'success' ? 'alert-success' : 'alert-danger' %>">
+                        <%= message %>
+                    </div>
+                    <% } %>
+
+                        <script>
+                            document.addEventListener("DOMContentLoaded", function() {
+                                const alert = document.querySelector(".alert-success");
+                                if (alert) {
+                                    setTimeout(() => {
+                                        alert.style.transition = "opacity 0.5s ease";
+                                        alert.style.opacity = "0";
+                                        setTimeout(() => alert.remove(), 500);
+                                    }, 1000); // hide after 3 seconds
+                                }
+                            });
+                        </script>
+            </form>
+        </div>
 </body>
 
 </html>

@@ -3,15 +3,109 @@
 <head>
   <meta charset="UTF-8">
   <title>View Profile</title>
-  <!-- Bootstrap 5 CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
+    body {
+      background: #000;
+      font-family: Arial, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: start;
+      padding-top: 80px;
+      margin: 0;
+    }
+
+    .card {
+      position: relative;
+      max-width: 500px;
+      width: 100%;
+      padding: 30px;
+      background: #111;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 0 20px rgba(255,255,255,0.1);
+      margin: 20px auto;
+      animation: fadeIn 1s ease forwards;
+    }
+
+    /* Animated gradient border */
+    .card::before,
+    .card::after {
+      content: "";
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(60deg, #ff3cac, #784ba0, #2b86c5, #00ffff, #ff3cac);
+      background-size: 400% 400%;
+      animation: rotate 10s linear infinite;
+      z-index: 0;
+    }
+
+    .card::after {
+      filter: blur(20px);
+    }
+
+    @keyframes rotate {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    @keyframes fadeIn {
+      0% { opacity: 0; transform: translateY(-20px);}
+      100% { opacity: 1; transform: translateY(0);}
+    }
+
+    .card-content {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      color: #fff;
+    }
+
     .profile-img {
       width: 150px;
       height: 150px;
       object-fit: cover;
       border-radius: 50%;
-      border: 4px solid #dee2e6;
+      border: 4px solid #fff;
+      margin-bottom: 15px;
+    }
+
+    ul.list-group {
+      background: #111;
+      border: none;
+    }
+
+    ul.list-group li {
+      background: #111;
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    .btn-warning, .btn-outline-primary {
+      border-radius: 5px;
+      padding: 8px 20px;
+      transition: all 0.3s ease;
+    }
+
+    .btn-warning:hover {
+      background: linear-gradient(90deg, #ff3cac, #784ba0, #2b86c5);
+      color: #fff;
+      transform: scale(1.05);
+    }
+
+    .btn-outline-primary:hover {
+      background: #00ffff;
+      color: #111;
+      transform: scale(1.05);
+      border-color: #00ffff;
+    }
+
+    a {
+      text-decoration: none;
     }
   </style>
 </head>
@@ -19,46 +113,44 @@
 
   <%- include("navbar.ejs") %>
 
-  <div class="container mt-5">
-    <div class="row justify-content-center">
-      <div class="col-md-6">
-        <div class="card shadow">
-          <div class="card-body text-center">
+  <div class="card">
+    <div class="card-content">
 
-            <!-- Profile photo -->
-            <% if (user.photo) { %>
-              <img src="/uploads/<%= user.photo %>" alt="Profile Photo" class="profile-img mb-3">
-            <% } else { %>
-              <img src="https://via.placeholder.com/150" alt="Default Photo" class="profile-img mb-3">
-            <% } %>
+      <% if (user) { %>
+        <% if (user.photo) { %>
+          <img src="/uploads/<%= user.photo %>" alt="Profile Photo" class="profile-img">
+        <% } else { %>
+          <img src="https://via.placeholder.com/150" alt="Default Photo" class="profile-img">
+        <% } %>
 
-            <!-- Username label -->
-            <h4 class="mb-1"><%= loginUserName %></h4>
-            <p class="text-muted mb-4">👤 User</p>
+        <h4><%= user.name %></h4>
+        <p class="text-muted mb-4">👤 <%= user.email %></p>
 
-            <!-- User details -->
-            <ul class="list-group list-group-flush text-start">
-              <li class="list-group-item"><strong>Email:</strong> <%= user.email %></li>
-              <li class="list-group-item"><strong>Contact:</strong> <%= user.contact %></li>
-              <li class="list-group-item"><strong>Address:</strong> <%= user.address %></li>
-              <li class="list-group-item"><strong>Qualification:</strong> <%= user.qualification %></li>
-              <li class="list-group-item"><strong>Course:</strong> <%= user.course %></li>
-              <li class="list-group-item"><strong>Skills:</strong> <%= user.skills %></li>
-            </ul>
+        <ul class="list-group list-group-flush text-start mb-3">
+          <li class="list-group-item"><strong>Name:</strong> <%= user.name %></li>
+          <li class="list-group-item"><strong>Email:</strong> <%= user.email %></li>
+          <li class="list-group-item"><strong>Contact:</strong> <%= user.contact %></li>
+          <li class="list-group-item"><strong>Address:</strong> <%= user.address %></li>
+          <li class="list-group-item"><strong>Qualification:</strong> <%= user.qualification %></li>
+          <li class="list-group-item"><strong>Course:</strong> <%= user.course %></li>
+          <li class="list-group-item"><strong>Skills:</strong> <%= user.skills %></li>
+          <li class="list-group-item"><strong>Member Since:</strong> 
+            <%= new Date(user.created_at).toLocaleDateString("en-IN", { year: 'numeric', month: 'long', day: 'numeric' }) %>
+          </li>
+        </ul>
 
-            <!-- Buttons -->
-            <div class="mt-4">
-              <a href="/updateprofile" class="btn btn-warning me-2">✏️ Update Profile</a>
-              <a href="/dashboard" class="btn btn-outline-primary">← Back to Dashboard</a>
-            </div>
-
-          </div>
+        <div class="mt-4">
+          <a href="/updateprofile" class="btn btn-warning me-2">✏️ Update Profile</a>
+          <a href="/dashboard" class="btn btn-outline-primary">← Back to Dashboard</a>
         </div>
-      </div>
+
+      <% } else { %>
+        <p class="text-danger">User data is not available.</p>
+      <% } %>
+
     </div>
   </div>
 
-  <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
