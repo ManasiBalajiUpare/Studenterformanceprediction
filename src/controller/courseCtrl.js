@@ -6,8 +6,21 @@ exports.renderAddCourseForm = (req, res) => {
     res.render("courses", { message: "", messageType: "" });
 };
 
+//Add Course
+/*exports.addCourse = async(req, res) => {
+    try {
+        const { course_name, description, total_credits } = req.body;
+        // Call your model
+        await require("../models/coursemodel").addCourse(course_name, description, total_credits);
 
+        res.render("courses", { message: "Course Added Successfully", messageType: "success" });
+    } catch (err) {
+        console.error("Error adding course:", err);
+        res.render("courses", { message: "Error adding course", messageType: "danger" });
+    }
+}; */
 
+//Add Course
 exports.addCourse = async(req, res) => {
     try {
         const { course_name, description, total_credits } = req.body;
@@ -20,9 +33,6 @@ exports.addCourse = async(req, res) => {
         res.render("courses", { message: "Error adding course", messageType: "danger" });
     }
 };
-
-
-
 
 // View all courses
 exports.viewallcourses = async(req, res) => {

@@ -1,6 +1,16 @@
 const db = require("../../db.js"); // make sure this is your MySQL connection
 
-// Add a course
+// Add Course
+/*const addCourse = async(course_name, description, total_credits) => {
+    if (!course_name || isNaN(total_credits)) {
+        throw new Error("Invalid input");
+    }
+    const sql =
+        "INSERT INTO courses (course_name, description, total_credits) VALUES (?, ?, ?)";
+    await db.query(sql, [course_name, description, total_credits]);
+}; */
+
+//Add Course
 const addCourse = async(course_name, description, total_credits) => {
     if (!course_name || isNaN(total_credits)) {
         throw new Error("Invalid input");
