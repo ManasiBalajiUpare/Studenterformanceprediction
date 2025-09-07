@@ -38,7 +38,7 @@ router.get("/performance",performanctrl.renderAddForm);
 
 router.get("/addnavbar", navbarCtrl.navbar);
 router.get("/admin/addcourse",courseCtrl.renderAddCourseForm);
-router.post("/admin/addcourse", courseCtrl.addcourse);
+router.post("/admin/addcourse", courseCtrl.addCourse);
 router.get("/admin/viewcourses", courseCtrl.viewallcourses);
 router.get("/deletecourse/:id", courseCtrl.deletecourse);
 router.post("/deletecourse/:id", courseCtrl.deletecourse);
