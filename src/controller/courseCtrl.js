@@ -7,20 +7,6 @@ exports.renderAddCourseForm = (req, res) => {
 };
 
 //Add Course
-/*exports.addCourse = async(req, res) => {
-    try {
-        const { course_name, description, total_credits } = req.body;
-        // Call your model
-        await require("../models/coursemodel").addCourse(course_name, description, total_credits);
-
-        res.render("courses", { message: "Course Added Successfully", messageType: "success" });
-    } catch (err) {
-        console.error("Error adding course:", err);
-        res.render("courses", { message: "Error adding course", messageType: "danger" });
-    }
-}; */
-
-//Add Course
 exports.addCourse = async(req, res) => {
     try {
         const { course_name, description, total_credits } = req.body;
@@ -99,18 +85,4 @@ exports.updatecourse = async(req, res) => {
         console.error("Error updating course:", err);
         res.send("Update failed");
     }
-};
-
-// Search course
-exports.searchCourseByUsingName = (req, res) => {
-    let course_name = req.query.course_name;
-
-    coursemodel.getSearchCourseByName(course_name)
-        .then((result) => {
-            res.json(result); // return results as JSON
-        })
-        .catch((err) => {
-            console.error(err);
-            res.status(500).send("Something went wrong");
-        });
 };

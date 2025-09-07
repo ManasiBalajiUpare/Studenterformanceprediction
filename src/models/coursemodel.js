@@ -1,15 +1,5 @@
 const db = require("../../db.js"); // make sure this is your MySQL connection
 
-// Add Course
-/*const addCourse = async(course_name, description, total_credits) => {
-    if (!course_name || isNaN(total_credits)) {
-        throw new Error("Invalid input");
-    }
-    const sql =
-        "INSERT INTO courses (course_name, description, total_credits) VALUES (?, ?, ?)";
-    await db.query(sql, [course_name, description, total_credits]);
-}; */
-
 //Add Course
 const addCourse = async(course_name, description, total_credits) => {
     if (!course_name || isNaN(total_credits)) {
@@ -18,17 +8,6 @@ const addCourse = async(course_name, description, total_credits) => {
     const sql =
         "INSERT INTO courses (course_name, description, total_credits) VALUES (?, ?, ?)";
     await db.query(sql, [course_name, description, total_credits]);
-};
-
-// Get courses by name (search)
-const getSearchCourseByName = (course_name) => {
-    return new Promise((resolve, reject) => {
-        const sql = "SELECT * FROM courses WHERE course_name LIKE ?";
-        db.query(sql, [`%${course_name}%`], (err, results) => {
-            if (err) reject(err);
-            else resolve(results);
-        });
-    });
 };
 
 // View all courses
@@ -77,7 +56,6 @@ const deleteCourse = (id) => {
 
 module.exports = {
     addCourse,
-    getSearchCourseByName,
     getAllCourses,
     getCourseById,
     updateCourse,
