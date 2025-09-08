@@ -51,3 +51,47 @@ exports.adminDashboard = (req, res) => {
     user: req.user,
   });
 };
+
+
+// SG
+
+exports.viewPendingStudents = async (req, res) => {
+  try {
+    const [rows] = await pool.query("SELECT * FROM users  WHERE status = 'pending'");
+    res.render("viewpendingstudent", { students: rows });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Database error");
+  }
+};
+
+exports.approveStatus = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const [result] = await pool.query("UPDATE users SET status = 'approved' WHERE user_id = ?", [id]);
+    res.redirect("/admin/viewpendingstudent");
+    if (result.length === 0) {
+      return res.send("Student not found");
+    }
+
+    res.render("editstatus", { student: result[0], message: null });
+  } catch (err) {
+    console.error("Error fetching student:", err);
+    res.status(500).send("Database error");
+  }
+};
+exports.approveAndRedirect = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    // 1️⃣ Update student status to approved
+    await pool.query("UPDATE users SET status = 'approved' WHERE user_id = ?", [id]);
+
+    // 2️⃣ Redirect to performance page
+    //res.redirect(/performance/add/${id});
+  } catch (err) {
+    console.error("Error approving student:", err);
+    res.status(500).send("Database error");
+  }
+};
