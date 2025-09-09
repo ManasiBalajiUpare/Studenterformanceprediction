@@ -91,9 +91,9 @@ router.post("/updateprofile",verifyToken,upload.single("photo"), loginctrl.updat
 router.get("/logout",loginctrl.logout);
 router.get("/about",homepagectrl.aboutPage);
 router.get("/contact",homepagectrl.contactPage);
-router.post("/performance/add", performanctrl.addPerformance);
-router.get("/list", performanctrl.listPerformances);
-router.get("/performance",performanctrl.renderAddForm);
+router.get("/admin/performance/add/:user_id", performanctrl.renderAddForm);
+router.post("/admin/performance/add", performanctrl.addPerformance);
+router.get("/admin/performance/list", performanctrl.listPerformances);
 
 //*Priyanka Routes************************* */
 
