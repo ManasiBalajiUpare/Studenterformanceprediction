@@ -16,7 +16,6 @@
       padding-top: 80px;
       margin: 0;
     }
-
     .container {
       position: relative;
       max-width: 800px;
@@ -28,8 +27,6 @@
       box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
       margin: 20px auto;
     }
-
-    /* Animated gradient border */
     .container::before,
     .container::after {
       content: "";
@@ -51,93 +48,20 @@
       z-index: 0;
       border-radius: 15px;
     }
-
-    .container::after {
-      filter: blur(20px);
-    }
-
-    @keyframes rotate {
-      0% {
-        transform: rotate(0deg);
-      }
-      100% {
-        transform: rotate(360deg);
-      }
-    }
-
-    .content {
-      position: relative;
-      z-index: 1;
-      color: #fff;
-    }
-
-    h2 {
-      text-align: center;
-      margin-bottom: 30px;
-      font-weight: bold;
-      color: #fff;
-    }
-
-    label {
-      color: #fff;
-      font-weight: 600;
-    }
-
-    input[type="number"],
-    input[type="text"],
-    input[type="email"],
-    input[type="password"],
-    textarea {
-      background: #111;
-      border: 1px solid #fff;
-      color: #fff;
-      border-radius: 8px;
-      padding: 10px 12px;
-      width: 100%;
-      margin-bottom: 15px;
-      box-sizing: border-box;
-      font-size: 14px;
-      transition: border-color 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    input[type="number"]:focus,
-    input[type="text"]:focus,
-    input[type="email"]:focus,
-    input[type="password"]:focus,
-    textarea:focus {
-      background: #111;
-      color: #fff;
-      border-color: #ff3cac;
-      box-shadow: 0 0 10px rgba(255, 60, 172, 0.5);
-      outline: none;
-    }
-
-    .btn-primary {
-      background: linear-gradient(90deg, #ff3cac, #784ba0, #2b86c5);
-      border: none;
-      width: 100%;
-      padding: 12px;
-      font-size: 18px;
-      font-weight: 600;
-      border-radius: 8px;
-      margin-top: 10px;
-      transition: box-shadow 0.3s ease;
-    }
-
-    .btn-primary:hover,
-    .btn-primary:focus {
-      box-shadow: 0 0 10px rgba(255, 60, 172, 0.8);
-    }
-
-    .alert {
-      margin-top: 10px;
-      font-weight: 600;
-      text-align: center;
-    }
+    .container::after { filter: blur(20px); }
+    @keyframes rotate { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    .content { position: relative; z-index: 1; color: #fff; }
+    h2 { text-align: center; margin-bottom: 30px; font-weight: bold; }
+    label { color: #fff; font-weight: 600; }
+    input[type="number"] { background: #111; border: 1px solid #fff; color: #fff; border-radius: 8px; padding: 10px 12px; width: 100%; margin-bottom: 15px; font-size: 14px; }
+    input[type="number"]:focus { border-color: #ff3cac; box-shadow: 0 0 10px rgba(255, 60, 172, 0.5); outline: none; }
+    .btn-primary { background: linear-gradient(90deg, #ff3cac, #784ba0, #2b86c5); border: none; width: 100%; padding: 12px; font-size: 18px; font-weight: 600; border-radius: 8px; margin-top: 10px; }
+    .btn-primary:hover { box-shadow: 0 0 10px rgba(255, 60, 172, 0.8); }
+    .alert { margin-top: 10px; font-weight: 600; text-align: center; }
   </style>
 </head>
 <body>
-     <%- include("navbar.ejs") %>
+  <%- include("navbar.ejs") %>
   <div class="container">
     <div class="content">
       <h2>Add Student Performance</h2>
@@ -146,9 +70,9 @@
         <div class="alert alert-danger"><%= msg %></div>
       <% } %>
 
-      <form action="/performance/add" method="POST">
-        <label for="user_id">Student ID</label>
-        <input type="number" id="user_id" name="user_id" placeholder="Enter Student ID" required />
+      <form action="/admin/performance/add" method="POST">
+        <!-- Hidden user_id -->
+        <input type="hidden" name="user_id" value="<%= user_id %>" />
 
         <label for="attendance">Attendance (%)</label>
         <input type="number" id="attendance" name="attendance" min="0" max="100" required />
