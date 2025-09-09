@@ -1,6 +1,5 @@
-const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const pool = require("../../db.js");
+const AdminModel = require("../models/adminmodel");
 
 // Show Admin Login Page
 exports.adminLogin = (req, res) => {
@@ -12,26 +11,23 @@ exports.validateAdminLogin = async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    const [rows] = await pool.query("SELECT * FROM admins WHERE email = ?", [email]);
-    const admin = rows[0];
+    const admin = await AdminModel.getAdminByEmail(email);
 
     if (!admin) {
       return res.render("adminlogin", { msg: "Invalid email or password" });
     }
 
-    const isMatch = await bcrypt.compare(password, admin.password);
-    if (!isMatch) {
+    // Plain-text comparison (remove bcrypt)
+    if (password !== admin.password) {
       return res.render("adminlogin", { msg: "Incorrect password" });
     }
 
-    // Create JWT token
     const token = jwt.sign(
       { admin_id: admin.admin_id, name: admin.name, email: admin.email, role: "admin" },
       process.env.JWT_SECRET,
       { expiresIn: "1d" }
     );
 
-    // Store token in cookie
     res.cookie("token", token, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000 });
 
     res.redirect("/admin/dashboard");
@@ -43,7 +39,6 @@ exports.validateAdminLogin = async (req, res) => {
 
 // Admin Dashboard
 exports.adminDashboard = (req, res) => {
-  // req.user should be set via middleware that validates JWT
   if (!req.user) return res.redirect("/admin/login");
 
   res.render("admindashboard", {
@@ -52,44 +47,43 @@ exports.adminDashboard = (req, res) => {
   });
 };
 
-
-// SG
-
+// View Pending Students
 exports.viewPendingStudents = async (req, res) => {
   try {
-    const [rows] = await pool.query("SELECT * FROM users  WHERE status = 'pending'");
-    res.render("viewpendingstudent", { students: rows });
+    const students = await AdminModel.getPendingStudents();
+    res.render("viewpendingstudent", { students });
   } catch (err) {
     console.error(err);
     res.status(500).send("Database error");
   }
 };
 
+// Approve Student Status and Render Edit Status
 exports.approveStatus = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const [result] = await pool.query("UPDATE users SET status = 'approved' WHERE user_id = ?", [id]);
-    res.redirect("/admin/viewpendingstudent");
-    if (result.length === 0) {
+    await AdminModel.approveStudentById(id);
+
+    const student = await AdminModel.getStudentById(id);
+    if (!student) {
       return res.send("Student not found");
     }
 
-    res.render("editstatus", { student: result[0], message: null });
+    res.render("editstatus", { student, message: "Student approved successfully" });
   } catch (err) {
-    console.error("Error fetching student:", err);
+    console.error("Error approving student:", err);
     res.status(500).send("Database error");
   }
 };
+
+// Approve and Redirect (without rendering, just redirect)
 exports.approveAndRedirect = async (req, res) => {
   const { id } = req.params;
 
   try {
-    // 1️⃣ Update student status to approved
-    await pool.query("UPDATE users SET status = 'approved' WHERE user_id = ?", [id]);
-
-    // 2️⃣ Redirect to performance page
-    //res.redirect(/performance/add/${id});
+    await AdminModel.approveStudentById(id);
+    res.redirect(`/performance/add/${id}`);
   } catch (err) {
     console.error("Error approving student:", err);
     res.status(500).send("Database error");
