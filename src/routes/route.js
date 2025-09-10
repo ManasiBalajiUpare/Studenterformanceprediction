@@ -100,11 +100,11 @@ router.get("/admin/performance/list", performanctrl.listPerformances);
 router.get("/addnavbar", navbarCtrl.navbar);
 router.get("/admin/addcourse",courseCtrl.renderAddCourseForm);
 router.post("/admin/addcourse", courseCtrl.addCourse);
-router.get("/admin/viewcourses", courseCtrl.viewallcourses);
-router.get("/deletecourse/:id", courseCtrl.deletecourse);
-router.post("/deletecourse/:id", courseCtrl.deletecourse);
-router.get("/editcourse/:id", courseCtrl.editcourse);
-router.post("/updatecourse/:id", courseCtrl.updatecourse);
+router.get("/admin/viewcourses", courseCtrl.viewAllCourses);
+router.get("/deletecourse/:id", courseCtrl.deleteCourse);
+router.post("/deletecourse/:id", courseCtrl.deleteCourse);
+router.get("/editcourse/:id", courseCtrl.editCourse);
+router.post("/updatecourse/:id", courseCtrl.updateCourse);
 //Jainab Routes***************************************** */
 router.get("/admin/viewstudent",studentController.viewStudents);
 router.get("/admin/viewpendingstudent",admincontroller.viewPendingStudents);
