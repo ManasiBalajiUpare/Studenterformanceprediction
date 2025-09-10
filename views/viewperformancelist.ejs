@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Performance List</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body>
+  <%- include("navbar.ejs") %>
+  <div class="container mt-5">
+    <h2 class="mb-4">Student Performance List</h2>
+    <table class="table table-dark table-striped">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Attendance</th>
+          <th>Assignments</th>
+          <th>Machine Test</th>
+          <th>Aptitude Test</th>
+          <th>Mock Interview</th>
+          <th>Theory</th>
+          <th>Practice</th>
+          <th>Communication</th>
+          <th>Behavior</th>
+          
+        </tr>
+      </thead>
+      <tbody>
+        <% performances.forEach(perf => { %>
+          <tr>
+            <td><%= perf.user_id %></td>
+            <td><%= perf.name %></td>
+            <td><%= perf.email %></td>
+            <td><%= perf.attendance %></td>
+            <td><%= perf.assignments_completed %></td>
+            <td><%= perf.machine_test_marks %></td>
+            <td><%= perf.aptitude_test_marks %></td>
+            <td><%= perf.mock_interview_score %></td>
+            <td><%= perf.theory_performance %></td>
+            <td><%= perf.practice_performance %></td>
+            <td><%= perf.communication_score %></td>
+            <td><%= perf.behavior_score %></td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>
