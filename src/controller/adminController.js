@@ -81,3 +81,4 @@ exports.addAdmin = async (req, res) => {
         messageType: "success",
     });
 };
+//admin
