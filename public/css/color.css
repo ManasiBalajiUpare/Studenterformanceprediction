@@ -1,0 +1,67 @@
+:root {
+  /* Background */
+  --bg-main: #F9F8F6;
+  --bg-card: #FFFFFF;
+  --bg-header-footer: #F3F2F8;
+
+  /* Text */
+  --text-primary: #1C1C1E;
+  --text-secondary: #8E8E93;
+  --link-color: #7F3DFF;
+
+  /* Buttons */
+  --btn-primary: #7F3DFF;
+  --btn-primary-hover: #A36FFF;
+  --btn-secondary: #FF6EC7;
+  --btn-secondary-hover: #FF85D1;
+  --btn-success: #00FFC8;
+  --btn-success-hover: #33FFE0;
+  --btn-warning: #FFD800;
+  --btn-warning-hover: #FFE733;
+  --btn-danger: #FF3D3D;
+  --btn-danger-hover: #FF5A5A;
+
+  /* Cards & Shadow */
+  --card-bg: #FFFFFF;
+  --card-shadow: #E5E5E5;
+
+  /* Form Inputs */
+  --input-bg: #FFFFFF;
+  --input-border: #DADADA;
+  --input-focus: #7F3DFF;
+}
+
+/* Example usage */
+body {
+  background-color: var(--bg-main);
+  color: var(--text-primary);
+}
+
+.card {
+  background-color: var(--card-bg);
+  box-shadow: 0 2px 5px var(--card-shadow);
+}
+
+a {
+  color: var(--link-color);
+}
+
+.btn-primary {
+  background-color: var(--btn-primary);
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background-color: var(--btn-primary-hover);
+}
+
+/* Input fields */
+input, select, textarea {
+  background-color: var(--input-bg);
+  border: 1px solid var(--input-border);
+}
+
+input:focus, select:focus, textarea:focus {
+  border-color: var(--input-focus);
+  outline: none;
+}

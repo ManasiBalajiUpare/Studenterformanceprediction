@@ -1,29 +1,46 @@
-const pool = require("../../db.js");
+const db = require('../../db.js');
 
-const AdminModel = {};
-
-// Fetch admin by email
-AdminModel.getAdminByEmail = async (email) => {
-  const [rows] = await pool.query("SELECT * FROM admins WHERE email = ?", [email]);
-  return rows[0];
+exports.getAdminByEmail = (email) => {
+    return new Promise((resolve, reject) => {
+        db.query('SELECT * FROM admins WHERE email = ?', [email], (err, result) => {
+            if (err) return reject(err);
+            resolve(result[0]);
+        });
+    });
 };
 
-// Get all pending students
-AdminModel.getPendingStudents = async () => {
-  const [rows] = await pool.query("SELECT * FROM users WHERE status = 'pending'");
-  return rows;
+exports.getPendingStudents = () => {
+    return new Promise((resolve, reject) => {
+        db.query('SELECT * FROM users WHERE status = "pending"', (err, result) => {
+            if (err) return reject(err);
+            resolve(result);
+        });
+    });
 };
 
-// Approve student by ID
-AdminModel.approveStudentById = async (id) => {
-  const [result] = await pool.query("UPDATE users SET status = 'approved' WHERE user_id = ?", [id]);
-  return result;
+exports.approveStudentById = (user_id) => {
+    return new Promise((resolve, reject) => {
+        db.query('UPDATE users SET status = "approved" WHERE user_id = ?', [user_id], (err, result) => {
+            if (err) return reject(err);
+            resolve(result);
+        });
+    });
 };
 
-// Get student by ID (optional: in case needed)
-AdminModel.getStudentById = async (id) => {
-  const [rows] = await pool.query("SELECT * FROM users WHERE user_id = ?", [id]);
-  return rows[0];
+exports.getStudentById = (user_id) => {
+    return new Promise((resolve, reject) => {
+        db.query('SELECT * FROM users WHERE user_id = ?', [user_id], (err, result) => {
+            if (err) return reject(err);
+            resolve(result[0]);
+        });
+    });
 };
 
-module.exports = AdminModel;
+exports.addAdmin = (name, email, password) => {
+    return new Promise((resolve, reject) => {
+        db.query('INSERT INTO admins (name, email, password) VALUES (?, ?, ?)', [name, email, password], (err, result) => {
+            if (err) return reject(err);
+            resolve(result);
+        });
+    });
+};
