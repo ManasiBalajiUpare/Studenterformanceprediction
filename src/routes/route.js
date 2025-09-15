@@ -110,13 +110,13 @@ router.get("/admin/logout", verifyToken("admin"), admincontroller.logout);
 // ----------------- Admin Courses ----------------- priyanka
 router.get("/admin/addcourse", verifyToken("admin"), courseCtrl.renderAddCourseForm);
 router.post("/admin/addcourse", verifyToken("admin"), courseCtrl.addCourse);
-router.get("/admin/viewcourses", verifyToken("admin"), courseCtrl.viewallcourses);
-router.post("/admin/deletecourse/:id", verifyToken("admin"), courseCtrl.deletecourse);
-router.post("/admin/updatecourse/:id", verifyToken("admin"), courseCtrl.updatecourse);
-//router.get("/deletecourse/:id",verifyToken("admin"),courseCtrl.deleteCourse);
-//router.get("/editcourse/:id", verifyToken("admin"),courseCtrl.editCourse);
+router.get("/admin/viewcourses",verifyToken("admin"), courseCtrl.viewAllCourses);
+router.post("/admin/deletecourse/:id", verifyToken("admin"), courseCtrl.deleteCourse);
+router.post("/admin/updatecourse/:id", verifyToken("admin"), courseCtrl.updateCourse);
+router.get("/deletecourse/:id",verifyToken("admin"),courseCtrl.deleteCourse);
+router.get("/editcourse/:id", verifyToken("admin"),courseCtrl.editCourse);
 //router.post("/updatecourse/:id",verifyToken("admin"), courseCtrl.updateCourse);
-//router.get("/user/view",courseCtrl.viewCoursesForUser);
+router.get("/user/view",courseCtrl.viewCoursesForUser);
 
 // ----------------- Admin Students -----------------
 router.get("/admin/viewstudent", verifyToken("admin"), studentController.viewStudents);
