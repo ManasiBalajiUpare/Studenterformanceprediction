@@ -1,57 +1,52 @@
-const db = require("../../db.js"); // make sure this is your MySQL connection
+const pool = require("../../db");
 
-//Add Course
+// Add Course
 const addCourse = async(course_name, description, total_credits) => {
     if (!course_name || isNaN(total_credits)) {
         throw new Error("Invalid input");
     }
     const sql =
         "INSERT INTO courses (course_name, description, total_credits) VALUES (?, ?, ?)";
-    await db.query(sql, [course_name, description, total_credits]);
+    const [result] = await pool.query(sql, [
+        course_name,
+        description,
+        total_credits,
+    ]);
+    return result;
 };
 
 // View all courses
-const getAllCourses = () => {
-    return new Promise((resolve, reject) => {
-        const sql = "SELECT * FROM courses";
-        db.query(sql, (err, results) => {
-            if (err) reject(err);
-            else resolve(results);
-        });
-    });
+const getAllCourses = async() => {
+    const sql = "SELECT * FROM courses";
+    const [rows] = await pool.query(sql);
+    return rows;
 };
 
 // Get course by ID
-const getCourseById = (id) => {
-    return new Promise((resolve, reject) => {
-        const sql = "SELECT * FROM courses WHERE course_id = ?";
-        db.query(sql, [id], (err, results) => {
-            if (err) reject(err);
-            else resolve(results);
-        });
-    });
+const getCourseById = async(id) => {
+    const sql = "SELECT * FROM courses WHERE course_id = ?";
+    const [rows] = await pool.query(sql, [id]);
+    return rows;
 };
 
 // Update course
-const updateCourse = (id, course_name, description, total_credits) => {
-    return new Promise((resolve, reject) => {
-        const sql = "UPDATE courses SET course_name=?, description=?, total_credits=? WHERE course_id=?";
-        db.query(sql, [course_name, description, total_credits, id], (err, result) => {
-            if (err) reject(err);
-            else resolve(result);
-        });
-    });
+const updateCourse = async(id, course_name, description, total_credits) => {
+    const sql =
+        "UPDATE courses SET course_name=?, description=?, total_credits=? WHERE course_id=?";
+    const [result] = await pool.query(sql, [
+        course_name,
+        description,
+        total_credits,
+        id,
+    ]);
+    return result;
 };
 
 // Delete course
-const deleteCourse = (id) => {
-    return new Promise((resolve, reject) => {
-        const sql = "DELETE FROM courses WHERE course_id=?";
-        db.query(sql, [id], (err, result) => {
-            if (err) reject(err);
-            else resolve(result);
-        });
-    });
+const deleteCourse = async(id) => {
+    const sql = "DELETE FROM courses WHERE course_id=?";
+    const [result] = await pool.query(sql, [id]);
+    return result;
 };
 
 module.exports = {
