@@ -13,10 +13,10 @@
 
       color: #E0E0E0; /* Light text for readability */
     }
-    .navbar {
+    /* .navbar {
     background: linear-gradient(90deg, #00FFE0, #00ADB5, #2D1B69);
 
-    }
+    } */
     .navbar-brand span {
       color: #ffffff;
       font-weight: bold;
@@ -24,7 +24,10 @@
     }
     .nav-link {
       color: #f5f5f5 !important;
-      transition: color 0.3s ease;
+      /* transition: color 0.1s ease; */
+      font-size: 20px;
+      font-weight: bold;
+      font-family:Arial, Helvetica, sans-serif;
     }
     .nav-link:hover {
       color: #FFD369 !important; /* Accent hover color */
@@ -44,47 +47,18 @@
   transform: scale(1.05);
 }
 .logo {
-    width: 100px;   /* Increase width */
-    height: auto;   /* Keep aspect ratio */
+    width:15%;   /* Increase width */
+    height: 10%;   /* Keep aspect ratio */
+    margin-left: 10px;
 }
-    
-  </style>
-</head>
+.img{
+      height: 100%;
+      width: 100%;
+      margin: 0%;
+}
 
-<body>
-<nav class="navbar navbar-expand-lg navbar-dark fixed-top">
-  <a class="navbar-brand d-flex align-items-center" href="/">
-   <img src="/images/4.png" alt="EduSage Logo" class="logo mr-2">
+/* sg css */
 
-    <span>EduSage</span>
-  </a>
-
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-
-  <div class="collapse navbar-collapse" id="navbarNav">
-    <ul class="navbar-nav ml-auto">
-      <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
-      <li class="nav-item"><a class="nav-link" href="/about">About</a></li>
-      <li class="nav-item"><a class="nav-link" href="/admin/viewcourses">Courses</a></li>
-      <li class="nav-item"><a class="nav-link" href="/contact">Contact</a></li>
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle btn btn-success text-white" href="#" id="loginDropdown" role="button"
-           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          LoginAs
-        </a>
-        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="loginDropdown">
-          <a class="dropdown-item" href="/adminlogin">Admin Login</a>
-          <a class="dropdown-item" href="/login">User Login</a>
-        </div>
-      </li>
-    </ul>
-  </div>
-</nav>
-
-<style>
 /* Body padding so content does not hide under navbar */
 body {
   padding-top: 70px; /* adjust if navbar height is different */
@@ -92,9 +66,9 @@ body {
 
 /* Navbar animated gradient */
 .navbar {
-  background: linear-gradient(270deg, #ff3cac, #784ba0, #2b86c5, #00ffff, #ff3cac);
+  background: linear-gradient(270deg, #b9359c, #e110b4, #cf8fbd, #d20fbb, #a36499);
   background-size: 1000% 1000%;
-  animation: gradientAnimation 15s ease infinite;
+  animation: gradientAnimation 100s ease infinite;
   box-shadow: 0 2px 10px rgba(0,0,0,0.3);
 }
 
@@ -137,7 +111,43 @@ body {
   color: #fff;
   transform: scale(1.05);
 }
-</style>
+    
+  </style>
+</head>
+
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+  <a class="navbar-brand d-flex align-items-center logo" href="/">
+   <img src="/images/4.png" alt="EduSage Logo" class=" img mr-2">
+
+    
+  </a>
+
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+      <li class="nav-item"><a class="nav-link" href="/about">About</a></li>
+      <li class="nav-item"><a class="nav-link" href="/admin/viewcourses">Courses</a></li>
+      <li class="nav-item"><a class="nav-link" href="/contact">Contact</a></li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle btn btn-success text-white" href="#" id="loginDropdown" role="button"
+           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          LoginAs
+        </a>
+        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="loginDropdown">
+          <a class="dropdown-item" href="/adminlogin">Admin Login</a>
+          <a class="dropdown-item" href="/login">User Login</a>
+        </div>
+      </li>
+    </ul>
+  </div>
+</nav>
+
 
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" crossorigin="anonymous"></script>

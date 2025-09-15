@@ -14,12 +14,12 @@
     /* Sidebar */
     .sidebar {
       height: 100vh;
-      background-color: #ff1399;
+      background-color:red;
       color: white;
       padding: 20px 15px;
       position: sticky;
       top: 0;
-      animation: slideInLeft 1s ease forwards;
+      
     }
 
     .sidebar h4 {
@@ -63,7 +63,7 @@
     }
 
     .welcome-box:hover {
-      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+      box-shadow: 0 8px 16px red(0,0,0,0.2);
       transform: translateY(-5px);
       transition: all 0.3s ease;
     }
@@ -107,7 +107,9 @@
     <div class="row">
     
       <div class="col-md-3 sidebar">
-        <h4>👤 <%= user.name %></h4>
+       <img src="/uploads/<%= user.photo %>" alt="<%= user.name %>" width="100" height="100" border-radius="50px">
+       <h4><%= user.name %></h4>
+
         <a href="/dashboard">🏠 Dashboard</a>
         <a href="/viewprofile">👤 View Profile</a>
         <a href="/viewperformance">📊 Your Performance</a>

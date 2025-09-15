@@ -1,9 +1,20 @@
 const bcrypt = require("bcrypt");
 const registermodel = require("../models/registermodel");
+const courseModel = require("../models/coursemodel");
 
-// Show registration page
-exports.register = (req, res) => {
-  res.render("register", { msg: null, showLoginLink: false });
+// Show registration page with courses
+exports.register = async (req, res) => {
+  try {
+    const courses = await courseModel.getAllCourses();  // Fetch all courses from DB
+    res.render("register", {
+      msg: null,
+      showLoginLink: false,
+      courses  // Pass courses to EJS
+    });
+  } catch (err) {
+    console.error("Error fetching courses:", err);
+    res.send("Error loading registration page.");
+  }
 };
 
 // Handle user registration
@@ -21,27 +32,25 @@ exports.registerUser = async (req, res) => {
       skills
     } = req.body;
 
-    // 1. Check if email already exists
     const existingUser = await registermodel.getUserByEmail(email);
     if (existingUser) {
       return res.render("register", {
         msg: "User already exists. Please login.",
-        showLoginLink: true
+        showLoginLink: true,
+        courses: await courseModel.getAllCourses()  // Reload courses
       });
     }
 
-    // 2. Check password match
     if (password !== confirm_password) {
       return res.render("register", {
         msg: "Passwords do not match.",
-        showLoginLink: false
+        showLoginLink: false,
+        courses: await courseModel.getAllCourses()  // Reload courses
       });
     }
 
-    // 3. Hash the password
     const hashedPassword = await bcrypt.hash(password, 8);
 
-    // 4. Prepare user data
     const userData = {
       name,
       email,
@@ -54,24 +63,16 @@ exports.registerUser = async (req, res) => {
       photo: req.file ? req.file.filename : null
     };
 
-    // 5. Insert user into database
     await registermodel.insertUser(userData);
 
-    // 6. On success → redirect to login page
     return res.render("login", { msg: "Registration successful. Please login." });
 
   } catch (err) {
     console.error("Registration Error:", err);
-    return res.render("register", {
+    res.render("register", {
       msg: "Something went wrong during registration.",
-      showLoginLink: false
+      showLoginLink: false,
+      courses: await courseModel.getAllCourses()  // Reload courses
     });
   }
 };
-
-
-
-
-// Shubham Logics 
-
-//manin
