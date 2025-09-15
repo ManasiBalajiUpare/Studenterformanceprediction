@@ -1,143 +1,115 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const loginusermodel = require("../models/loginusermodel.js");
-const pool = require("../../db.js");
+const loginUserModel = require("../models/loginUserModel");
 
-// Show login form
+// Show login page
 exports.login = (req, res) => {
   res.render("login", { msg: null });
 };
 
-// Validate login credentials and issue JWT
+// Validate login
 exports.validateLoginUser = async (req, res) => {
-  const { email, password } = req.body;
+  const email = req.body.email.trim();
+  const password = req.body.password;
+
+  const userData = await loginUserModel.validateUser(email);
+  if (!userData) return res.render("login", { msg: "Invalid email or password" });
+
+  const isMatch = await bcrypt.compare(password, userData.password);
+  if (!isMatch) return res.render("login", { msg: "Incorrect password" });
+
+  const token = jwt.sign(
+    {
+      user_id: userData.user_id,
+      name: userData.name,
+      email: userData.email,
+      photo: userData.photo,
+      role: userData.role,
+    },
+    process.env.JWT_SECRET,
+    { expiresIn: "1d" }
+  );
+
+  res.cookie("token", token, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000 });
+  res.redirect("/dashboard");
+};
+
+// Dashboard
+exports.dashboard = (req, res) => {
+  if (req.user.role === "admin") {
+    res.render("admindashboard", { loginUserName: req.user.name, user: req.user });
+  } else {
+    res.render("userdashboard", { loginUserName: req.user.name, user: req.user });
+  }
+};
+
+// View Profile
+
+
+exports.viewProfile = async (req, res) => {
+  const userId = req.user.user_id;
 
   try {
-    const userData = await loginusermodel.validateUser(email);
+    const userData = await loginUserModel.getUserById(userId);
 
     if (!userData) {
-      return res.render("login", { msg: "Invalid email or password" });
+      return res.send("User not found");
     }
 
-    const isMatch = await bcrypt.compare(password, userData.password);
-    if (!isMatch) {
-      return res.render("login", { msg: "Incorrect password" });
-    }
-
-    // Create JWT token
-    // Add role: userData.role to token
-const token = jwt.sign(
-  {
-    user_id: userData.user_id,
-    name: userData.name,
-    email: userData.email,
-    photo: userData.photo,
-    role: userData.role, 
-  },
-  process.env.JWT_SECRET,
-  { expiresIn: "1d" }
-);
-
-
-    // Store token in cookie
-    res.cookie("token", token, {
-      httpOnly: true,
-      maxAge: 24 * 60 * 60 * 1000,
-    });
-
-    res.redirect("/dashboard");
+    res.render("viewprofile", { loginUserName: userData.name, user: userData });
   } catch (err) {
-    console.error("Login error:", err);
-    res.render("login", { msg: "Something went wrong. Try again." });
+    console.error("Error fetching user data:", err);
+    res.send("Something went wrong");
   }
 };
 
-exports.dashboard = (req, res) => {
-  const role = req.user.role; // ✅ Use actual role from JWT
 
-  console.log("Role=" + role);
-
-  if (role === "admin") {
-    res.render("admindashboard", {
-      loginUserName: req.user.name,
-      user: req.user, 
-    });
-  } else {
-    res.render("userdashboard", {
-      loginUserName: req.user.name,
-      user: req.user, 
-    });
-  }
-};
-
-// Show profile
-exports.viewProfile = (req, res) => {
-  res.render("viewprofile", {
-    loginUserName: req.user.name,
-    user: req.user,
-  });
-};
-
-// Show update form
+// Show Update Form
+// Show Update Profile Form
 exports.updateProfileForm = (req, res) => {
-  res.render("updateprofile", {
-    loginUserEmail: req.user.email,
-    user: req.user,
-  });
+  res.render("updateprofile", { loginUserEmail: req.user.email, user: req.user, msg: null });
 };
 
-// Handle profile update
+// Handle Profile Update
 exports.updateProfile = async (req, res) => {
   const userId = req.user.user_id;
-  const {
-    name,
-    email,
-    contact,
-    address,
-    qualification,
-    course,
-    skills,
-  } = req.body;
-
   const photo = req.file ? req.file.filename : req.user.photo;
 
+  const data = {
+    name: req.body.name,
+    email: req.body.email,
+    contact: req.body.contact,
+    address: req.body.address,
+    qualification: req.body.qualification,
+    course: req.body.course,
+    skills: req.body.skills,
+    photo: photo,
+  };
+
   try {
-    const sql = `UPDATE users 
-      SET name=?, email=?, contact=?, address=?, qualification=?, course=?, skills=?, photo=? 
-      WHERE user_id=?`;
+    const updatedUser = await loginUserModel.updateUser(userId, data);
 
-    await pool.query(sql, [
-      name,
-      email,
-      contact,
-      address,
-      qualification,
-      course,
-      skills,
-      photo,
-      userId,
-    ]);
-
-    // Regenerate JWT with updated info
-    const [updatedUserRows] = await pool.query(
-      "SELECT * FROM users WHERE user_id = ?",
-      [userId]
+    const newToken = jwt.sign(
+      {
+        user_id: updatedUser.user_id,
+        name: updatedUser.name,
+        email: updatedUser.email,
+        photo: updatedUser.photo,
+        role: updatedUser.role,
+      },
+      process.env.JWT_SECRET,
+      { expiresIn: "1d" }
     );
 
-    const updatedUser = updatedUserRows[0];
-    const newToken = jwt.sign(updatedUser, process.env.JWT_SECRET, {
-      expiresIn: "1d",
-    });
-
-    res.cookie("token", newToken, {
-      httpOnly: true,
-      maxAge: 24 * 60 * 60 * 1000,
-    });
-
+    res.cookie("token", newToken, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000 });
     res.redirect("/viewprofile");
   } catch (err) {
-    console.error("Update error:", err);
-    res.send("Something went wrong.");
+    console.error("Profile update error:", err);
+    res.render("updateprofile", {
+      loginUserEmail: req.user.email,
+      user: req.user,
+      msg: "Error updating profile. Please try again.",
+    });
   }
 };
 
@@ -146,4 +118,4 @@ exports.logout = (req, res) => {
   res.clearCookie("token");
   res.redirect("/login");
 };
-//main
+// Logout
