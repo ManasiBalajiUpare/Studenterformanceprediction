@@ -71,6 +71,7 @@ const admincontroller = require("../controller/adminController");
 const courseCtrl = require("../controller/courseCtrl");
 const studentController = require("../controller/studentController");
 const navbarCtrl = require("../controller/navbarCtrl");
+const perCtrl=require("../controller/performanceController.js");
 const upload = require("../middleware/upload.js");
 const verifyToken = require("../middleware/verifyToken");
 
@@ -115,13 +116,14 @@ router.post("/admin/deletecourse/:id", verifyToken("admin"), courseCtrl.deleteCo
 router.post("/admin/updatecourse/:id", verifyToken("admin"), courseCtrl.updateCourse);
 router.get("/deletecourse/:id",verifyToken("admin"),courseCtrl.deleteCourse);
 router.get("/editcourse/:id", verifyToken("admin"),courseCtrl.editCourse);
-//router.post("/updatecourse/:id",verifyToken("admin"), courseCtrl.updateCourse);
+router.post("/updatecourse/:id",verifyToken("admin"), courseCtrl.updateCourse);
+router.get("/viewallcourses",courseCtrl.viewAllCourses);
 router.get("/user/view",courseCtrl.viewCoursesForUser);
 
 // ----------------- Admin Students -----------------
 router.get("/admin/viewstudent", verifyToken("admin"), studentController.viewStudents);
 router.post("/admin/deletestudent/:id", verifyToken("admin"), studentController.deleteStudent);
 router.post("/admin/updatestudent/:id", verifyToken("admin"), studentController.updateStudent);
-
+router.post("/performance",perCtrl.addPerformance);
 module.exports = router;
 
