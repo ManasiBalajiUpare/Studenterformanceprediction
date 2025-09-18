@@ -98,3 +98,14 @@ exports.viewCoursesForUser = async(req, res) => {
         res.status(500).send("Error retrieving courses");
     }
 };
+exports.searchCourses = async(req, res) => {
+    const { query } = req.query;
+
+    try {
+        const courses = await Course.searchCourses(query);
+        res.json(courses); // Must return JSON
+    } catch (err) {
+        console.error("Error searching courses:", err);
+        res.status(500).json({ message: "Database error" });
+    }
+};
