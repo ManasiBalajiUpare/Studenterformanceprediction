@@ -48,11 +48,17 @@ const deleteCourse = async(id) => {
     const [result] = await pool.query(sql, [id]);
     return result;
 };
-
+const searchCourses = async(query) => {
+    const sql = "SELECT * FROM courses WHERE course_name LIKE ?";
+    const [rows] = await pool.query(sql, [`%${query}%`]);
+    return rows;
+};
 module.exports = {
     addCourse,
     getAllCourses,
     getCourseById,
     updateCourse,
     deleteCourse,
+    searchCourses,
+
 };
