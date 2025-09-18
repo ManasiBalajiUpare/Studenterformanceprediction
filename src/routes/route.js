@@ -74,6 +74,7 @@ const navbarCtrl = require("../controller/navbarCtrl");
 const perCtrl=require("../controller/performanceController.js");
 const upload = require("../middleware/upload.js");
 const verifyToken = require("../middleware/verifyToken");
+const performanceController=require("../controller/performanceController.js");
 
 // ----------------- Home & Auth -----------------
 router.get("/addnavbar", navbarCtrl.navbar);
@@ -107,6 +108,12 @@ router.post("/admin/add-admin", verifyToken("admin"), admincontroller.addAdmin);
 router.get("/admin/viewpendingstudent", verifyToken("admin"), admincontroller.viewPendingStudents);
 router.get("/admin/approvestatus/:user_id", verifyToken("admin"), admincontroller.approveStatus);
 router.get("/admin/logout", verifyToken("admin"), admincontroller.logout);
+// Admin - Performance
+router.get("/admin/performance/add/:user_id", verifyToken("admin"),performanceController.renderAddForm);
+router.post("/admin/performance/add", verifyToken("admin"),performanceController.addPerformance);
+//router.get("/admin/performance/list", verifyToken("admin"),performanceController.listPerformances);
+
+
 
 // ----------------- Admin Courses ----------------- priyanka
 router.get("/admin/addcourse", verifyToken("admin"), courseCtrl.renderAddCourseForm);
