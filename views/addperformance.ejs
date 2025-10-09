@@ -1,109 +1,98 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Add Student Performance</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <style>
-    body {
-      background-color: #000;
-      font-family: Arial, sans-serif;
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: start;
-      padding-top: 80px;
-      margin: 0;
-    }
-    .container {
-      position: relative;
-      max-width: 800px;
-      width: 100%;
-      padding: 30px 40px;
-      background: #111;
-      border-radius: 15px;
-      overflow: hidden;
-      box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
-      margin: 20px auto;
-    }
-    .container::before,
-    .container::after {
-      content: "";
-      position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: linear-gradient(
-        60deg,
-        #ff3cac,
-        #784ba0,
-        #2b86c5,
-        #00ffff,
-        #ff3cac
-      );
-      background-size: 400% 400%;
-      animation: rotate 10s linear infinite;
-      z-index: 0;
-      border-radius: 15px;
-    }
-    .container::after { filter: blur(20px); }
-    @keyframes rotate { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-    .content { position: relative; z-index: 1; color: #fff; }
-    h2 { text-align: center; margin-bottom: 30px; font-weight: bold; }
-    label { color: #fff; font-weight: 600; }
-    input[type="number"] { background: #111; border: 1px solid #fff; color: #fff; border-radius: 8px; padding: 10px 12px; width: 100%; margin-bottom: 15px; font-size: 14px; }
-    input[type="number"]:focus { border-color: #ff3cac; box-shadow: 0 0 10px rgba(255, 60, 172, 0.5); outline: none; }
-    .btn-primary { background: linear-gradient(90deg, #ff3cac, #784ba0, #2b86c5); border: none; width: 100%; padding: 12px; font-size: 18px; font-weight: 600; border-radius: 8px; margin-top: 10px; }
-    .btn-primary:hover { box-shadow: 0 0 10px rgba(255, 60, 172, 0.8); }
-    .alert { margin-top: 10px; font-weight: 600; text-align: center; }
-  </style>
+    <title>Add / Update Performance</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .container {
+            max-width: 700px;
+            margin-top: 50px;
+            padding: 30px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .btn-submit {
+            width: 100%;
+        }
+        .back-link {
+            display: block;
+            margin-top: 15px;
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
-  <%- include("navbar.ejs") %>
-  <div class="container">
-    <div class="content">
-      <h2>Add Student Performance</h2>
+    <div class="container">
+        <h2>Add / Update Performance</h2>
+        <form action="/admin/performance/add/<%= user_id %>" method="POST">
+            <div class="mb-3">
+                <label class="form-label">Attendance (out of 10)</label>
+                <input type="number" name="attendance" step="0.1" max="10" class="form-control" value="<%= performance ? performance.attendance : '' %>">
+            </div>
 
-      <% if(msg){ %>
-        <div class="alert alert-danger"><%= msg %></div>
-      <% } %>
+            <div class="mb-3">
+                <label class="form-label">Assignments Completed (out of 10)</label>
+                <input type="number" name="assignments_completed" step="0.1" max="10" class="form-control" value="<%= performance ? performance.assignments_completed : '' %>">
+            </div>
 
-      <form action="/admin/performance/add" method="POST">
-        <!-- Hidden user_id -->
-        <input type="hidden" name="user_id" value="<%= user_id %>" />
+            <div class="mb-3">
+                <label class="form-label">Machine Test Marks (out of 10)</label>
+                <input type="number" name="machine_test_marks" step="0.1" max="10" class="form-control" value="<%= performance ? performance.machine_test_marks : '' %>">
+            </div>
 
-        <label for="attendance">Attendance (%)</label>
-        <input type="number" id="attendance" name="attendance" min="0" max="100" required />
+            <div class="mb-3">
+                <label class="form-label">Aptitude Test Marks (out of 10)</label>
+                <input type="number" name="aptitude_test_marks" step="0.1" max="10" class="form-control" value="<%= performance ? performance.aptitude_test_marks : '' %>">
+            </div>
 
-        <label for="assignments_completed">Assignments Completed</label>
-        <input type="number" id="assignments_completed" name="assignments_completed" min="0" required />
+            <div class="mb-3">
+                <label class="form-label">Mock Interview Score (out of 10)</label>
+                <input type="number" name="mock_interview_score" step="0.1" max="10" class="form-control" value="<%= performance ? performance.mock_interview_score : '' %>">
+            </div>
 
-        <label for="machine_test_marks">Machine Test Marks</label>
-        <input type="number" id="machine_test_marks" name="machine_test_marks" step="0.01" required />
+            <div class="mb-3">
+                <label class="form-label">Theory Grade</label>
+                <select name="theory" class="form-select">
+                    <option value="Excellent" <%= performance && performance.theory=='Excellent' ? 'selected' : '' %>>Excellent</option>
+                    <option value="Good" <%= performance && performance.theory=='Good' ? 'selected' : '' %>>Good</option>
+                    <option value="Average" <%= performance && performance.theory=='Average' ? 'selected' : '' %>>Average</option>
+                </select>
+            </div>
 
-        <label for="aptitude_test_marks">Aptitude Test Marks</label>
-        <input type="number" id="aptitude_test_marks" name="aptitude_test_marks" step="0.01" required />
+            <div class="mb-3">
+                <label class="form-label">Communication Grade</label>
+                <select name="communication" class="form-select">
+                    <option value="Excellent" <%= performance && performance.communication=='Excellent' ? 'selected' : '' %>>Excellent</option>
+                    <option value="Good" <%= performance && performance.communication=='Good' ? 'selected' : '' %>>Good</option>
+                    <option value="Average" <%= performance && performance.communication=='Average' ? 'selected' : '' %>>Average</option>
+                </select>
+            </div>
 
-        <label for="mock_interview_score">Mock Interview Score</label>
-        <input type="number" id="mock_interview_score" name="mock_interview_score" step="0.01" required />
+            <div class="mb-3">
+                <label class="form-label">Behavior Grade</label>
+                <select name="behavior" class="form-select">
+                    <option value="Excellent" <%= performance && performance.behavior=='Excellent' ? 'selected' : '' %>>Excellent</option>
+                    <option value="Good" <%= performance && performance.behavior=='Good' ? 'selected' : '' %>>Good</option>
+                    <option value="Average" <%= performance && performance.behavior=='Average' ? 'selected' : '' %>>Average</option>
+                </select>
+            </div>
 
-        <label for="theory_performance">Theory Performance</label>
-        <input type="number" id="theory_performance" name="theory_performance" step="0.01" required />
+            <button type="submit" class="btn btn-primary btn-submit">Submit</button>
+        </form>
 
-        <label for="practice_performance">Practice Performance</label>
-        <input type="number" id="practice_performance" name="practice_performance" step="0.01" required />
-
-        <label for="communication_score">Communication Score</label>
-        <input type="number" id="communication_score" name="communication_score" step="0.01" required />
-
-        <label for="behavior_score">Behavior Score</label>
-        <input type="number" id="behavior_score" name="behavior_score" step="0.01" required />
-
-        <button type="submit" class="btn btn-primary">Add Performance</button>
-      </form>
+        <a href="/admin/performance-list" class="back-link">Back to Performance List</a>
     </div>
-  </div>
+
+    <!-- Bootstrap JS (Optional for dropdowns or components) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

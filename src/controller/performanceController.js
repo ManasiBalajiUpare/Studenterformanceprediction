@@ -1,66 +1,66 @@
-// const Performance = require("../models/performanceModel");
+const performanceModel = require('../models/performanceModel');
 
-// // Render Add Performance Form
- exports.renderAddForm = (req, res) => {
-  const { user_id } = req.params; // Get user_id from URL
- res.render("addperformance", { msg: null, user_id });
-};
-exports.addPerformance = async (req, res) => {
-  try {
-    const data = req.body;
-    console.log("Received req.body:", data);
+// ----------------------------
+// Helper function: Calculate predicted percentage
+// ----------------------------
+function calculatePrediction(performance) {
+    const totalScore = performance.attendance * 0.1 +
+                       performance.assignments_completed * 0.1 +
+                       performance.machine_test_marks * 0.2 +
+                       performance.aptitude_test_marks * 0.2 +
+                       performance.mock_interview_score * 0.2;
+    return Math.round(totalScore * 10); // scale to 100%
+}
 
-    if (!data.user_id) {
-      return res.status(400).send("Missing user_id");
+// ----------------------------
+// Render Add/Update Performance Form
+// ----------------------------
+exports.renderAddForm = async (req, res) => {
+    try {
+        const user_id = req.params.user_id;
+        const performance = await performanceModel.getPerformanceByUserId(user_id);
+        res.render('addPerformance', { user_id, performance });
+    } catch (err) {
+        console.error(err);
+        res.send("Error loading performance form.");
     }
-
-    const performance_id = await PerformanceModel.insertPerformance(data);
-
-    const historicalRecords = await PerformanceModel.getPerformanceByUser(data.user_id);
-
-    const latestRecord = historicalRecords.find(
-      (r) => r.performance_id === performance_id
-    );
-
-    const predictionResult = runLinearRegression(historicalRecords, latestRecord);
-
-    await PredictionModel.insertPrediction(data.user_id, predictionResult.latest.prediction);
-
-    res.redirect("/performance/list");
-  } catch (err) {
-    console.error("Add Performance Error:", err);
-    res.status(500).send("Internal Server Error");
-  }
 };
 
-exports.updatePerformance = async (req, res) => {
-  try {
-    const { performance_id } = req.params;
-    const data = req.body;
+// ----------------------------
+// Handle Add/Update Submission
+// ----------------------------
+exports.addPerformance = async (req, res) => {
+    try {
+        const user_id = req.params.user_id;
+        const data = { ...req.body, user_id }; // merge user_id into form data
 
-    await PerformanceModel.updatePerformance(performance_id, data);
+        const existing = await performanceModel.getPerformanceByUserId(user_id);
+        const predicted_percentage = calculatePrediction(data);
 
-    const latestRecord = await PerformanceModel.getPerformanceById(performance_id);
-    const historicalRecords = await PerformanceModel.getPerformanceByUser(latestRecord.user_id);
+        if (existing) {
+            await performanceModel.updatePerformance(data, user_id);
+            await performanceModel.updatePrediction(user_id, predicted_percentage);
+        } else {
+            await performanceModel.addPerformance(data);
+            await performanceModel.addPrediction(user_id, predicted_percentage);
+        }
 
-    const predictionResult = runLinearRegression(historicalRecords, latestRecord);
-
-    await PredictionModel.updatePrediction(latestRecord.user_id, predictionResult.latest.prediction);
-
-    res.redirect("/performance/list");
-  } catch (err) {
-    console.error("Update Performance Error:", err);
-    res.status(500).send("Internal Server Error");
-  }
+        res.redirect('/admin/performance-list');
+    } catch (err) {
+        console.error(err);
+        res.send("Error occurred while saving performance.");
+    }
 };
-// // List all performances with user info
-// exports.listPerformances = async (req, res) => {
-//   try {
-//     const performances = await Performance.getAll(); // Get all performance records
-//     res.render("viewperformancelist", { performances });
-//   } catch (err) {
-//     console.error("Error fetching performances:", err);
-//     res.send("Error fetching performances");
-//   }
-// };
-// //m
+
+// ----------------------------
+// List All Performances (Admin)
+// ----------------------------
+exports.listPerformances = async (req, res) => {
+    try {
+        const performances = await performanceModel.getAllPerformances();
+        res.render('viewperformancelist.ejs', { performances });
+    } catch (err) {
+        console.error(err);
+        res.send("Error fetching performance list.");
+    }
+};

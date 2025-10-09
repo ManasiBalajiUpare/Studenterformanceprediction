@@ -108,10 +108,17 @@ router.post("/admin/add-admin", verifyToken("admin"), admincontroller.addAdmin);
 router.get("/admin/viewpendingstudent", verifyToken("admin"), admincontroller.viewPendingStudents);
 router.get("/admin/approvestatus/:user_id", verifyToken("admin"), admincontroller.approveStatus);
 router.get("/admin/logout", verifyToken("admin"), admincontroller.logout);
-// Admin - Performance
-router.get("/admin/performance/add/:user_id", verifyToken("admin"),performanceController.renderAddForm);
-router.post("/admin/performance/add", verifyToken("admin"),performanceController.addPerformance);
-//router.get("/admin/performance/list", verifyToken("admin"),performanceController.listPerformances);
+
+
+
+
+
+//performance routes
+router.get("/admin/performance-list", verifyToken("admin"), performanceController.listPerformances);
+router.get("/admin/performance/add/:user_id", verifyToken("admin"), performanceController.renderAddForm);
+router.post("/admin/performance/add/:user_id", verifyToken("admin"), performanceController.addPerformance);
+router.get("/admin/performance/edit/:user_id", verifyToken("admin"), performanceController.renderAddForm);
+router.post("/admin/performance/edit/:user_id", verifyToken("admin"), performanceController.addPerformance);
 
 
 
@@ -124,6 +131,9 @@ router.post("/admin/updatecourse/:id", verifyToken("admin"), courseCtrl.updateCo
 router.get("/deletecourse/:id",verifyToken("admin"),courseCtrl.deleteCourse);
 router.get("/editcourse/:id", verifyToken("admin"),courseCtrl.editCourse);
 router.post("/updatecourse/:id",verifyToken("admin"), courseCtrl.updateCourse);
+router.post("/deletecourse/:id", verifyToken("admin"), courseCtrl.deleteCourse);
+router.get("/courses/search", courseCtrl.searchCourses);
+router.get("/deletecourse/:id", verifyToken("admin"), courseCtrl.deleteCourse);
 router.get("/viewallcourses",courseCtrl.viewAllCourses);
 router.get("/user/view",courseCtrl.viewCoursesForUser);
 
