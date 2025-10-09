@@ -1,52 +1,68 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Performance List</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <title>Performance List</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .container {
+            margin-top: 50px;
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        table {
+            background-color: #fff;
+        }
+    </style>
 </head>
 <body>
-  <%- include("navbar.ejs") %>
-  <div class="container mt-5">
-    <h2 class="mb-4">Student Performance List</h2>
-    <table class="table table-dark table-striped">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Name</th>
-          <th>Email</th>
-          <th>Attendance</th>
-          <th>Assignments</th>
-          <th>Machine Test</th>
-          <th>Aptitude Test</th>
-          <th>Mock Interview</th>
-          <th>Theory</th>
-          <th>Practice</th>
-          <th>Communication</th>
-          <th>Behavior</th>
-          
-        </tr>
-      </thead>
-      <tbody>
-        <% performances.forEach(perf => { %>
-          <tr>
-            <td><%= perf.user_id %></td>
-            <td><%= perf.name %></td>
-            <td><%= perf.email %></td>
-            <td><%= perf.attendance %></td>
-            <td><%= perf.assignments_completed %></td>
-            <td><%= perf.machine_test_marks %></td>
-            <td><%= perf.aptitude_test_marks %></td>
-            <td><%= perf.mock_interview_score %></td>
-            <td><%= perf.theory_performance %></td>
-            <td><%= perf.practice_performance %></td>
-            <td><%= perf.communication_score %></td>
-            <td><%= perf.behavior_score %></td>
-          </tr>
-        <% }) %>
-      </tbody>
-    </table>
-  </div>
+    <div class="container">
+        <h2>Student Performance List</h2>
+        <table class="table table-striped table-bordered table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>User ID</th>
+                    <th>Attendance</th>
+                    <th>Assignments Completed</th>
+                    <th>Machine Test</th>
+                    <th>Aptitude Test</th>
+                    <th>Mock Interview</th>
+                    <th>Theory</th>
+                    <th>Communication</th>
+                    <th>Behavior</th>
+                    <th>Predicted %</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% performances.forEach(function(p) { %>
+                    <tr>
+                        <td><%= p.user_id %></td>
+                        <td><%= p.attendance %></td>
+                        <td><%= p.assignments_completed %></td>
+                        <td><%= p.machine_test_marks %></td>
+                        <td><%= p.aptitude_test_marks %></td>
+                        <td><%= p.mock_interview_score %></td>
+                        <td><%= p.theory %></td>
+                        <td><%= p.communication %></td>
+                        <td><%= p.behavior %></td>
+                        <td><%= p.predicted_percentage ? p.predicted_percentage : 0 %> %</td>
+                        <td>
+                            <a href="/admin/performance/add/<%= p.user_id %>" class="btn btn-sm btn-primary">Edit / Add</a>
+                        </td>
+                    </tr>
+                <% }) %>
+            </tbody>
+        </table>
+        <a href="/admin/dashboard" class="btn btn-secondary">Back to Dashboard</a>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
