@@ -71,10 +71,10 @@ const admincontroller = require("../controller/adminController");
 const courseCtrl = require("../controller/courseCtrl");
 const studentController = require("../controller/studentController");
 const navbarCtrl = require("../controller/navbarCtrl");
-const perCtrl=require("../controller/performanceController.js");
+const perCtrl = require("../controller/performanceController.js");
 const upload = require("../middleware/upload.js");
 const verifyToken = require("../middleware/verifyToken");
-const performanceController=require("../controller/performanceController.js");
+const performanceController = require("../controller/performanceController.js");
 
 // ----------------- Home & Auth -----------------
 router.get("/addnavbar", navbarCtrl.navbar);
@@ -108,6 +108,7 @@ router.post("/admin/add-admin", verifyToken("admin"), admincontroller.addAdmin);
 router.get("/admin/viewpendingstudent", verifyToken("admin"), admincontroller.viewPendingStudents);
 router.get("/admin/approvestatus/:user_id", verifyToken("admin"), admincontroller.approveStatus);
 router.get("/admin/logout", verifyToken("admin"), admincontroller.logout);
+<<<<<<< Updated upstream
 
 
 
@@ -119,15 +120,22 @@ router.get("/admin/performance/add/:user_id", verifyToken("admin"), performanceC
 router.post("/admin/performance/add/:user_id", verifyToken("admin"), performanceController.addPerformance);
 router.get("/admin/performance/edit/:user_id", verifyToken("admin"), performanceController.renderAddForm);
 router.post("/admin/performance/edit/:user_id", verifyToken("admin"), performanceController.addPerformance);
+=======
+// Admin - Performance
+router.get("/admin/performance/add/:user_id", verifyToken("admin"), performanceController.renderAddForm);
+router.post("/admin/performance/add", verifyToken("admin"), performanceController.addPerformance);
+//router.get("/admin/performance/list", verifyToken("admin"),performanceController.listPerformances);
+>>>>>>> Stashed changes
 
 
 
 // ----------------- Admin Courses ----------------- priyanka
 router.get("/admin/addcourse", verifyToken("admin"), courseCtrl.renderAddCourseForm);
 router.post("/admin/addcourse", verifyToken("admin"), courseCtrl.addCourse);
-router.get("/admin/viewcourses",verifyToken("admin"), courseCtrl.viewAllCourses);
-router.post("/admin/deletecourse/:id", verifyToken("admin"), courseCtrl.deleteCourse);
+router.get("/admin/viewcourses", verifyToken("admin"), courseCtrl.viewAllCourses);
+router.post("/deletecourse/:id", verifyToken("admin"), courseCtrl.deleteCourse);
 router.post("/admin/updatecourse/:id", verifyToken("admin"), courseCtrl.updateCourse);
+<<<<<<< Updated upstream
 router.get("/deletecourse/:id",verifyToken("admin"),courseCtrl.deleteCourse);
 router.get("/editcourse/:id", verifyToken("admin"),courseCtrl.editCourse);
 router.post("/updatecourse/:id",verifyToken("admin"), courseCtrl.updateCourse);
@@ -136,11 +144,20 @@ router.get("/courses/search", courseCtrl.searchCourses);
 router.get("/deletecourse/:id", verifyToken("admin"), courseCtrl.deleteCourse);
 router.get("/viewallcourses",courseCtrl.viewAllCourses);
 router.get("/user/view",courseCtrl.viewCoursesForUser);
+=======
+router.get("/deletecourse/:id", verifyToken("admin"), courseCtrl.deleteCourse);
+router.get("/editcourse/:id", verifyToken("admin"), courseCtrl.editCourse);
+router.post("/updatecourse/:id", verifyToken("admin"), courseCtrl.updateCourse);
+router.get("/viewallcourses", courseCtrl.viewAllCourses);
+router.get("/user/view", courseCtrl.viewCoursesForUser);
+>>>>>>> Stashed changes
 
+router.post("/deletecourse/:id", verifyToken("admin"), courseCtrl.deleteCourse);
+router.get("/courses/search", courseCtrl.searchCourses);
+router.get("/deletecourse/:id", verifyToken("admin"), courseCtrl.deleteCourse);
 // ----------------- Admin Students -----------------
 router.get("/admin/viewstudent", verifyToken("admin"), studentController.viewStudents);
 router.post("/admin/deletestudent/:id", verifyToken("admin"), studentController.deleteStudent);
 router.post("/admin/updatestudent/:id", verifyToken("admin"), studentController.updateStudent);
-router.post("/performance",perCtrl.addPerformance);
+router.post("/performance", perCtrl.addPerformance);
 module.exports = router;
-
